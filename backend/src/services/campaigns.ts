@@ -186,3 +186,13 @@ export async function updateCampaign(
     return { status: 'ok', campaign: (await loadCampaign(tx, id))! };
   });
 }
+
+// Questions, answers, submissions and leads of the campaign are removed too (cascade).
+export async function deleteCampaign(id: string): Promise<boolean> {
+  if (!isUuid(id)) return false;
+  const deleted = await db
+    .delete(campaigns)
+    .where(eq(campaigns.id, id))
+    .returning({ id: campaigns.id });
+  return deleted.length > 0;
+}

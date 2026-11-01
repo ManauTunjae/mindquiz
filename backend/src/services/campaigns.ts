@@ -1,6 +1,7 @@
-import { asc, eq, inArray } from 'drizzle-orm';
+import { asc, count, desc, eq, inArray } from 'drizzle-orm';
+import { z } from 'zod';
 import { db } from '../db/client.js';
-import { answerOptions, campaigns, questions } from '../db/schema.js';
+import { answerOptions, campaigns, questions, submissions } from '../db/schema.js';
 import type { CreateCampaignInput } from '../validation/campaign.js';
 import { slugify, withRandomSuffix } from './slug.js';
 
@@ -111,4 +112,31 @@ export async function createCampaign(input: CreateCampaignInput): Promise<Campai
     }
   }
   throw new Error('Could not create a unique slug');
+}
+
+// A value that is not a uuid can never be a campaign id (and Postgres would throw an error).
+const isUuid = (value: string) => z.uuid().safeParse(value).success;
+
+export async function listCampaigns() {
+  return db
+    .select({
+      id: campaigns.id,
+      slug: campaigns.slug,
+      title: campaigns.title,
+      description: campaigns.description,
+      accentColor: campaigns.accentColor,
+      status: campaigns.status,
+      createdAt: campaigns.createdAt,
+      updatedAt: campaigns.updatedAt,
+      participants: count(submissions.id),
+    })
+    .from(campaigns)
+    .leftJoin(submissions, eq(submissions.campaignId, campaigns.id))
+    .groupBy(campaigns.id)
+    .orderBy(desc(campaigns.createdAt));
+}
+
+export async function getCampaign(id: string): Promise<CampaignDetail | null> {
+  if (!isUuid(id)) return null;
+  return loadCampaign(db, id);
 }

@@ -3,6 +3,7 @@ import { cors } from 'hono/cors';
 import { requireAdmin } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
 import { loginRoutes, sessionRoutes } from './routes/admin/auth.js';
+import { campaignRoutes } from './routes/admin/campaigns.js';
 
 export const app = new Hono();
 
@@ -17,3 +18,4 @@ app.get('/api/health', (c) => c.json({ status: 'ok' }));
 app.route('/api/admin/auth', loginRoutes);
 app.use('/api/admin/*', requireAdmin);
 app.route('/api/admin/auth', sessionRoutes);
+app.route('/api/admin/campaigns', campaignRoutes);

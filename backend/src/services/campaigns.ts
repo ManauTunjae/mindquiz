@@ -2,7 +2,7 @@ import { asc, count, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '../db/client.js';
 import { answerOptions, campaigns, questions, submissions } from '../db/schema.js';
-import type { CreateCampaignInput } from '../validation/campaign.js';
+import type { CreateCampaignInput, UpdateCampaignInput } from '../validation/campaign.js';
 import { slugify, withRandomSuffix } from './slug.js';
 
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -139,4 +139,50 @@ export async function listCampaigns() {
 export async function getCampaign(id: string): Promise<CampaignDetail | null> {
   if (!isUuid(id)) return null;
   return loadCampaign(db, id);
+}
+
+export type UpdateResult =
+  | { status: 'ok'; campaign: CampaignDetail }
+  | { status: 'not_found' }
+  | { status: 'has_participants' };
+
+export async function updateCampaign(
+  id: string,
+  input: UpdateCampaignInput,
+): Promise<UpdateResult> {
+  if (!isUuid(id)) return { status: 'not_found' };
+
+  return db.transaction(async (tx) => {
+    // Lock the campaign row. A visitor cannot send a submission while we change the questions,
+    // because saving a submission needs a lock on this row too.
+    const [existing] = await tx.select().from(campaigns).where(eq(campaigns.id, id)).for('update');
+    if (!existing) return { status: 'not_found' };
+
+    if (input.questions) {
+      const [{ total }] = await tx
+        .select({ total: count() })
+        .from(submissions)
+        .where(eq(submissions.campaignId, id));
+      // Changing questions would delete the answers of the participants and break the statistics
+      if (total > 0) return { status: 'has_participants' };
+    }
+
+    await tx
+      .update(campaigns)
+      .set({
+        title: input.title,
+        description: input.description,
+        accentColor: input.accentColor,
+        status: input.status,
+        updatedAt: new Date(),
+      })
+      .where(eq(campaigns.id, id));
+
+    if (input.questions) {
+      await tx.delete(questions).where(eq(questions.campaignId, id));
+      await insertQuestions(tx, id, input.questions);
+    }
+
+    return { status: 'ok', campaign: (await loadCampaign(tx, id))! };
+  });
 }

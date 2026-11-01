@@ -48,7 +48,7 @@ Rules for content:
 | ---------------- | ------------------------------------------------------------------ |
 | Monorepo         | one git repo, root folder `mindquiz`                               |
 | Backend          | TypeScript + Hono, Node, port **8000** (`/backend`)                |
-| Database         | PostgreSQL 17 in **Docker Compose**, port **5432**                 |
+| Database         | PostgreSQL 17 in **Docker Compose**, port **5433**                 |
 | ORM / migrations | **Drizzle ORM** + `drizzle-kit`                                    |
 | Validation       | **Zod** (same rules on backend and in forms)                       |
 | Frontend         | Next.js (App Router) + Tailwind CSS 4, port **3000** (`/frontend`) |

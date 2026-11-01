@@ -9,6 +9,7 @@ import { emptyQuestion } from '@/lib/campaign-form';
 import type { CampaignInput } from '@/lib/types';
 import { Button, buttonClasses } from './ui/button';
 import { Card } from './ui/card';
+import { ContrastHint } from './ContrastHint';
 import { TextArea, TextField } from './ui/text-field';
 
 const MIN_QUESTIONS = 3;
@@ -125,6 +126,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
               className="min-h-12 w-full rounded-2xl border border-charcoal/50 bg-surface px-4 py-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-charcoal"
             />
           </div>
+          <ContrastHint colour={values.accentColor} />
           {errors.accentColor && (
             <p role="alert" className="text-sm font-medium text-red-800">
               {errors.accentColor}

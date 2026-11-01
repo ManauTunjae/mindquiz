@@ -59,7 +59,14 @@ export default function CampaignsPage() {
       )}
 
       {campaigns?.map((campaign) => (
-        <CampaignRow key={campaign.id} campaign={campaign} />
+        <CampaignRow
+          key={campaign.id}
+          campaign={campaign}
+          onChange={(updated) =>
+            setCampaigns((list) => list && list.map((c) => (c.id === updated.id ? updated : c)))
+          }
+          onDeleted={(id) => setCampaigns((list) => list && list.filter((c) => c.id !== id))}
+        />
       ))}
     </div>
   );

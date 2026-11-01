@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { deleteCookie, setCookie } from 'hono/cookie';
 import { HttpError } from '../../middleware/error-handler.js';
 import { SESSION_COOKIE, type AuthEnv } from '../../middleware/auth.js';
+import { rateLimit } from '../../middleware/rate-limit.js';
 import { createSession, deleteSession, verifyCredentials } from '../../services/auth.js';
 import { loginSchema } from '../../validation/auth.js';
 import { parseBody } from '../../validation/parse.js';
@@ -11,7 +12,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 // Public: login must work without a session. It is mounted before the auth middleware.
 export const loginRoutes = new Hono();
 
-loginRoutes.post('/login', async (c) => {
+// 10 login attempts per 15 minutes per client
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
+
+loginRoutes.post('/login', loginLimiter, async (c) => {
   const { email, password } = await parseBody(c, loginSchema);
 
   const admin = await verifyCredentials(email, password);

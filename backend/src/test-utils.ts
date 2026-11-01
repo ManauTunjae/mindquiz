@@ -23,3 +23,22 @@ export async function createTestAdmin() {
     },
   };
 }
+
+// A valid campaign body. Override fields to test one rule at a time.
+export function makeCampaignInput(overrides: Record<string, unknown> = {}) {
+  const question = (n: number) => ({
+    text: `Question ${n}?`,
+    options: [
+      { text: 'Right', isCorrect: true },
+      { text: 'Wrong', isCorrect: false },
+    ],
+  });
+  return {
+    title: `Test campaign ${randomUUID()}`,
+    description: 'Made by a test',
+    accentColor: '#FF7A00',
+    status: 'draft',
+    questions: [question(1), question(2), question(3)],
+    ...overrides,
+  };
+}

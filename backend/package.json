@@ -6,7 +6,11 @@
     "dev": "tsx watch src/server.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx src/db/seed.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hono/node-server": "^1.0.0",

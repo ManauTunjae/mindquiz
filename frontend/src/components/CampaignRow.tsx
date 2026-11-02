@@ -3,10 +3,23 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import {
+  Check,
+  ChartColumn,
+  ClipboardList,
+  Copy,
+  EyeOff,
+  Link2,
+  Pencil,
+  Send,
+  Trash2,
+  Users,
+} from 'lucide-react';
 import { adminApi, errorMessage, isUnauthorized } from '@/lib/api';
 import type { CampaignListItem } from '@/lib/types';
 import { Button, buttonClasses } from './ui/button';
 import { Card } from './ui/card';
+import { IconBubble } from './ui/icon-bubble';
 import { StatusBadge } from './StatusBadge';
 
 type Props = {
@@ -64,19 +77,24 @@ export function CampaignRow({ campaign, onChange, onDeleted }: Props) {
 
   return (
     <Card className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <h2 className="font-heading text-xl font-semibold">{campaign.title}</h2>
-        <StatusBadge status={campaign.status} />
+      <div className="flex items-start gap-3">
+        <IconBubble icon={ClipboardList} />
+        <div className="flex min-w-0 flex-1 flex-wrap items-start justify-between gap-x-3 gap-y-2">
+          <h2 className="font-heading text-lg font-semibold sm:text-xl">{campaign.title}</h2>
+          <StatusBadge status={campaign.status} />
+        </div>
       </div>
 
-      <dl className="flex flex-col gap-1 text-sm text-charcoal/80">
-        <div className="flex gap-2">
+      <dl className="flex flex-col gap-2 text-sm text-charcoal/80">
+        <div className="flex items-center gap-2">
+          <Users className="size-4 shrink-0" aria-hidden="true" />
           <dt className="font-bold">Participants:</dt>
           <dd>{campaign.participants}</dd>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-start gap-2">
+          <Link2 className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
           <dt className="font-bold">Public link:</dt>
-          <dd className="break-all">
+          <dd className="min-w-0 break-all">
             <Link
               href={`/c/${campaign.slug}`}
               target="_blank"
@@ -110,6 +128,7 @@ export function CampaignRow({ campaign, onChange, onDeleted }: Props) {
           </p>
           <div className="flex flex-wrap gap-3">
             <Button variant="danger" onClick={remove} disabled={busy}>
+              <Trash2 className="size-5" aria-hidden="true" />
               {busy ? 'Deleting…' : 'Yes, delete'}
             </Button>
             <Button variant="secondary" onClick={() => setConfirmingDelete(false)} disabled={busy}>
@@ -120,12 +139,14 @@ export function CampaignRow({ campaign, onChange, onDeleted }: Props) {
       ) : (
         <div className="flex flex-wrap gap-3">
           <Link href={`/admin/campaigns/${campaign.id}`} className={buttonClasses('secondary')}>
+            <ChartColumn className="size-5" aria-hidden="true" />
             Results
           </Link>
           <Link
             href={`/admin/campaigns/${campaign.id}/edit`}
             className={buttonClasses('secondary')}
           >
+            <Pencil className="size-5" aria-hidden="true" />
             Edit
           </Link>
           <Button
@@ -133,12 +154,23 @@ export function CampaignRow({ campaign, onChange, onDeleted }: Props) {
             onClick={togglePublish}
             disabled={busy}
           >
+            {published ? (
+              <EyeOff className="size-5" aria-hidden="true" />
+            ) : (
+              <Send className="size-5" aria-hidden="true" />
+            )}
             {published ? 'Unpublish' : 'Publish'}
           </Button>
           <Button variant="secondary" onClick={copyLink}>
+            {copied ? (
+              <Check className="size-5" aria-hidden="true" />
+            ) : (
+              <Copy className="size-5" aria-hidden="true" />
+            )}
             {copied ? 'Copied!' : 'Copy link'}
           </Button>
           <Button variant="danger" onClick={() => setConfirmingDelete(true)} disabled={busy}>
+            <Trash2 className="size-5" aria-hidden="true" />
             Delete
           </Button>
         </div>

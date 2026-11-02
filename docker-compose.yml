@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17
+    container_name: mindquiz-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mindquiz
+      POSTGRES_PASSWORD: mindquiz_dev_password
+      POSTGRES_DB: mindquiz
+    ports:
+      - '5433:5432'
+    volumes:
+      - mindquiz_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U mindquiz -d mindquiz']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mindquiz_pgdata:

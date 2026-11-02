@@ -19,3 +19,8 @@ npm-debug.log*
 # OS / editor
 .DS_Store
 .idea/
+
+# generated
+*.tsbuildinfo
+next-env.d.ts
+frontend/AGENTS.md

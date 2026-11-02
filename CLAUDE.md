@@ -48,11 +48,12 @@ Rules for content:
 | ---------------- | ------------------------------------------------------------------ |
 | Monorepo         | one git repo, root folder `mindquiz`                               |
 | Backend          | TypeScript + Hono, Node, port **8000** (`/backend`)                |
-| Database         | PostgreSQL 17 in **Docker Compose**, port **5432**                 |
+| Database         | PostgreSQL 17 in **Docker Compose**, port **5433**                 |
 | ORM / migrations | **Drizzle ORM** + `drizzle-kit`                                    |
 | Validation       | **Zod** (same rules on backend and in forms)                       |
 | Frontend         | Next.js (App Router) + Tailwind CSS 4, port **3000** (`/frontend`) |
-| Fonts            | `next/font`: Inter (body) + one minimal serif for headings         |
+| Fonts            | `next/font`: Inter (body) + IBM Plex Mono (headings)               |
+| Icons            | `lucide-react` (decorative, `aria-hidden`)                         |
 | Animations       | CSS transitions + Framer Motion (`motion`), `canvas-confetti`      |
 | Tests            | Vitest (backend logic)                                             |
 | Root scripts     | `concurrently` → `npm run dev` starts backend + frontend           |

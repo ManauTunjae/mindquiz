@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #ff7a00;
+  --color-primary-soft: #ffe3cc;
+  /* Text on top of primary. Dark on orange: white would only give about 2.6:1. */
+  --color-on-primary: #1e1e1e;
+  --color-ivory: #f7f4ef;
+  --color-surface: #ffffff;
+  --color-charcoal: #1e1e1e;
+  --color-mist: #d9d6d0;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-heading: var(--font-plex-mono), ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+/* All headings use IBM Plex Mono. It is wide, so long words may break instead of overflowing. */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* The progress bar of the animated demo on the home page. It is also the timer of the demo. */
+@keyframes step-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+}
+
+/* Safety net for people who ask for less motion: no animations or transitions in the whole app.
+   (The quiz animations from the motion library are turned down separately, in Quiz.tsx.) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -4,6 +4,7 @@ import { requireAdmin } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
 import { loginRoutes, sessionRoutes } from './routes/admin/auth.js';
 import { campaignRoutes } from './routes/admin/campaigns.js';
+import { publicCampaignRoutes } from './routes/public/campaigns.js';
 
 export const app = new Hono();
 
@@ -19,3 +20,6 @@ app.route('/api/admin/auth', loginRoutes);
 app.use('/api/admin/*', requireAdmin);
 app.route('/api/admin/auth', sessionRoutes);
 app.route('/api/admin/campaigns', campaignRoutes);
+
+// Public routes: no login, never return isCorrect before the visitor has answered.
+app.route('/api/public', publicCampaignRoutes);

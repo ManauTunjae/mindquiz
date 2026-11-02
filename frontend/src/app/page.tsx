@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Benefits } from '@/components/landing/Benefits';
 import { Footer } from '@/components/landing/Footer';
 import { Hero } from '@/components/landing/Hero';
 import { LandingHeader } from '@/components/landing/LandingHeader';
@@ -21,6 +22,7 @@ export default function HomePage() {
       <LandingHeader />
       <main id="main">
         <Hero />
+        <Benefits />
       </main>
       <Footer />
     </>

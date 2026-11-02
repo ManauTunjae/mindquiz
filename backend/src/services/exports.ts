@@ -8,8 +8,12 @@ import {
   submissionAnswers,
   submissions,
 } from '../db/schema.js';
+import { getCampaign } from './campaigns.js';
 import { formatUtc, toCsv, type CsvCell, type CsvDelimiter } from './csv.js';
 import { isUuid } from './ids.js';
+import { listLeads } from './leads.js';
+import { buildReportPdf } from './pdf-report.js';
+import { getCampaignStats } from './stats.js';
 
 export type ExportFile = { filename: string; body: string };
 
@@ -164,4 +168,33 @@ export async function buildParticipantsCsv(
     filename: `mindquiz-${campaign.slug}-answers-${day(now)}.csv`,
     body: toCsv(table, { delimiter }),
   };
+}
+
+export type ReportFile = { filename: string; body: Buffer };
+
+// The PDF report: a summary, the answers per question and the leads.
+// `generatedBy` is the e-mail of the admin who asked for it, and it is written in the report.
+export async function buildReportFile(
+  campaignId: string,
+  generatedBy: string,
+  now = new Date(),
+): Promise<ReportFile | null> {
+  const campaign = await getCampaign(campaignId);
+  if (!campaign) return null;
+
+  const [stats, leadRows] = await Promise.all([
+    getCampaignStats(campaign.id),
+    listLeads(campaign.id),
+  ]);
+  if (!stats || !leadRows) return null;
+
+  const body = await buildReportPdf({
+    campaign: { title: campaign.title, status: campaign.status, createdAt: campaign.createdAt },
+    stats,
+    leads: leadRows,
+    generatedAt: now,
+    generatedBy,
+  });
+
+  return { filename: `mindquiz-${campaign.slug}-report-${day(now)}.pdf`, body };
 }

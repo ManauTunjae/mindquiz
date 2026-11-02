@@ -11,15 +11,17 @@ The quiz questions are general knowledge questions. The app never asks about a v
 
 ## Tech stack
 
-| Part       | Choice                                           |
-| ---------- | ------------------------------------------------ |
-| Backend    | TypeScript, Hono, Node (port 8000)               |
-| Database   | PostgreSQL 17 in Docker Compose (port **5433**)  |
-| ORM        | Drizzle ORM + drizzle-kit (migrations)           |
-| Validation | Zod                                              |
-| Frontend   | Next.js (App Router), Tailwind CSS 4 (port 3000) |
-| Animations | motion (Framer Motion), canvas-confetti          |
-| Tests      | Vitest (backend)                                 |
+| Part       | Choice                                               |
+| ---------- | ---------------------------------------------------- |
+| Backend    | TypeScript, Hono, Node (port 8000)                   |
+| Database   | PostgreSQL 17 in Docker Compose (port **5433**)      |
+| ORM        | Drizzle ORM + drizzle-kit (migrations)               |
+| Validation | Zod                                                  |
+| Frontend   | Next.js (App Router), Tailwind CSS 4 (port 3000)     |
+| Animations | motion (Framer Motion), canvas-confetti              |
+| Fonts      | Inter (text), IBM Plex Mono (headings) via next/font |
+| Icons      | lucide-react                                         |
+| Tests      | Vitest (backend)                                     |
 
 ## Get started
 

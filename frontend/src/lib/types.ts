@@ -38,6 +38,38 @@ export type CampaignInput = {
   questions: Array<{ text: string; options: Array<{ text: string; isCorrect: boolean }> }>;
 };
 
+// --- Results of a campaign (admin) ---
+
+export type CampaignStats = {
+  participants: number;
+  averageScore: number | null; // for example 2.4, or null if no one has answered
+  total: number; // number of questions
+  leads: number;
+  questions: Array<{
+    id: number;
+    text: string;
+    position: number;
+    answered: number;
+    options: Array<{
+      id: number;
+      text: string;
+      isCorrect: boolean;
+      count: number;
+      percent: number;
+    }>;
+  }>;
+};
+
+export type Lead = {
+  id: number;
+  name: string;
+  email: string;
+  score: number;
+  total: number;
+  consentAt: string;
+  createdAt: string;
+};
+
 // --- Public quiz (what a visitor gets) ---
 
 // There is no "isCorrect" here. The visitor only sees the correct answers after submitting.

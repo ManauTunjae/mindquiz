@@ -2,12 +2,14 @@
 
 import { useId, useState } from 'react';
 import Link from 'next/link';
+import { HeartHandshake, Mail, PartyPopper, Send, ShieldCheck, User } from 'lucide-react';
 import { ApiError } from '@/lib/api';
 import { validateLead } from '@/lib/lead-schema';
 import { submitLead } from '@/lib/public-api';
 import { PRIVACY_EMAIL } from '@/lib/site';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
+import { IconBubble } from '../ui/icon-bubble';
 import { TextField } from '../ui/text-field';
 
 type Props = { submissionId: string; consentText: string };
@@ -58,9 +60,10 @@ export function LeadForm({ submissionId, consentText }: Props) {
 
   if (done) {
     return (
-      <Card role="status" className="text-center">
+      <Card role="status" className="flex flex-col items-center gap-2 py-8 text-center">
+        <IconBubble icon={PartyPopper} size="lg" />
         <h2 className="font-heading text-2xl font-semibold">Thank you!</h2>
-        <p className="mt-2 text-charcoal/80">
+        <p className="text-charcoal/80">
           {done === 'saved'
             ? 'We saved your details.'
             : 'Your details were already sent. Thank you!'}
@@ -73,11 +76,15 @@ export function LeadForm({ submissionId, consentText }: Props) {
     <Card>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
         <div className="flex flex-col gap-2">
-          <h2 className="font-heading text-2xl font-semibold">Stay in touch</h2>
+          <h2 className="flex items-center gap-3 font-heading text-2xl font-semibold">
+            <IconBubble icon={HeartHandshake} size="sm" />
+            Stay in touch
+          </h2>
           <p className="text-charcoal/80">
             Want to hear from the organisation? Leave your details. This is optional.
           </p>
           <p className="text-sm text-charcoal/70">
+            <ShieldCheck className="mr-1.5 inline size-4 align-text-bottom" aria-hidden="true" />
             We only store your name and e-mail. We never store health data. To have your data
             deleted, write to {PRIVACY_EMAIL}. Read more on our{' '}
             <Link
@@ -94,6 +101,7 @@ export function LeadForm({ submissionId, consentText }: Props) {
 
         <TextField
           label="Name"
+          icon={User}
           autoComplete="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -102,6 +110,7 @@ export function LeadForm({ submissionId, consentText }: Props) {
         />
         <TextField
           label="E-mail"
+          icon={Mail}
           type="email"
           autoComplete="email"
           value={email}
@@ -142,6 +151,7 @@ export function LeadForm({ submissionId, consentText }: Props) {
         )}
 
         <Button type="submit" disabled={sending}>
+          <Send className="size-5" aria-hidden="true" />
           {sending ? 'Sending…' : 'Send my details'}
         </Button>
       </form>

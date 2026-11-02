@@ -2,12 +2,23 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Clock,
+  Flag,
+  ListChecks,
+  MessageCircleQuestion,
+  Play,
+  ShieldCheck,
+} from 'lucide-react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { ApiError } from '@/lib/api';
 import { submitQuiz } from '@/lib/public-api';
 import type { PublicCampaign, QuizResult } from '@/lib/types';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
+import { IconBubble } from '../ui/icon-bubble';
 import { ProgressBar } from './ProgressBar';
 import { QuestionStep } from './QuestionStep';
 import { ResultCard } from './ResultCard';
@@ -97,16 +108,27 @@ export function Quiz({ campaign }: { campaign: PublicCampaign }) {
               transition={{ duration: 0.25, ease: 'easeOut' }}
             >
               <Card className="flex flex-col gap-5">
+                <IconBubble icon={MessageCircleQuestion} size="lg" />
                 <h1 className="font-heading text-3xl font-semibold">{campaign.title}</h1>
                 {campaign.description && (
                   <p className="text-lg text-charcoal/80">{campaign.description}</p>
                 )}
                 {questions.length > 0 ? (
                   <>
-                    <p className="text-sm font-bold text-charcoal/80">
-                      {questions.length} questions · takes about a minute
-                    </p>
-                    <Button onClick={() => setPhase('questions')}>Start quiz</Button>
+                    <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-charcoal/80">
+                      <li className="flex items-center gap-2">
+                        <ListChecks className="size-4" aria-hidden="true" />
+                        {questions.length} questions
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Clock className="size-4" aria-hidden="true" />
+                        About a minute
+                      </li>
+                    </ul>
+                    <Button onClick={() => setPhase('questions')}>
+                      <Play className="size-5" aria-hidden="true" />
+                      Start quiz
+                    </Button>
                   </>
                 ) : (
                   <p>This quiz has no questions yet.</p>
@@ -165,6 +187,7 @@ export function Quiz({ campaign }: { campaign: PublicCampaign }) {
               <div className="flex gap-3">
                 {index > 0 && (
                   <Button variant="secondary" onClick={back} disabled={submitting}>
+                    <ArrowLeft className="size-5" aria-hidden="true" />
                     Back
                   </Button>
                 )}
@@ -174,6 +197,12 @@ export function Quiz({ campaign }: { campaign: PublicCampaign }) {
                   disabled={selected === null || submitting}
                 >
                   {submitting ? 'Checking…' : isLast ? 'Finish' : 'Next'}
+                  {!submitting &&
+                    (isLast ? (
+                      <Flag className="size-5" aria-hidden="true" />
+                    ) : (
+                      <ArrowRight className="size-5" aria-hidden="true" />
+                    ))}
                 </Button>
               </div>
             </motion.div>
@@ -198,8 +227,9 @@ export function Quiz({ campaign }: { campaign: PublicCampaign }) {
             href="/privacy"
             target="_blank"
             rel="noopener"
-            className="underline underline-offset-2"
+            className="inline-flex items-center gap-1.5 underline underline-offset-2"
           >
+            <ShieldCheck className="size-4" aria-hidden="true" />
             Privacy<span className="sr-only"> (opens in a new tab)</span>
           </Link>
         </footer>

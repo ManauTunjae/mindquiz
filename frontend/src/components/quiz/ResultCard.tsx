@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
+import { CircleCheck, CircleX, Lightbulb, ListChecks, Trophy } from 'lucide-react';
 import type { PublicCampaign, QuizResult } from '@/lib/types';
 import { Card } from '../ui/card';
+import { IconBubble } from '../ui/icon-bubble';
 import { fireConfetti } from './confetti';
 import { LeadForm } from './LeadForm';
 
@@ -41,7 +43,8 @@ export function ResultCard({ campaign, result }: Props) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
       >
-        <Card className="flex flex-col gap-3 text-center">
+        <Card className="flex flex-col items-center gap-3 text-center">
+          <IconBubble icon={Trophy} size="lg" />
           <p className="text-sm font-bold text-charcoal/80">Your result</p>
           <h1
             ref={headingRef}
@@ -61,7 +64,11 @@ export function ResultCard({ campaign, result }: Props) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.4 }}
       >
-        <h2 id="review-heading" className="font-heading text-2xl font-semibold">
+        <h2
+          id="review-heading"
+          className="flex items-center gap-3 font-heading text-2xl font-semibold"
+        >
+          <IconBubble icon={ListChecks} size="sm" />
           Your answers
         </h2>
         <ol className="flex flex-col gap-3">
@@ -74,17 +81,26 @@ export function ResultCard({ campaign, result }: Props) {
                   <p className="font-bold">
                     {i + 1}. {question?.text}
                   </p>
-                  <p>
-                    <span className="font-bold">{right ? '✓ Correct' : '✗ Not quite'}</span>
+                  <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="inline-flex items-center gap-1.5 font-bold">
+                      {right ? (
+                        <CircleCheck className="size-5" aria-hidden="true" />
+                      ) : (
+                        <CircleX className="size-5" aria-hidden="true" />
+                      )}
+                      {right ? 'Correct' : 'Not quite'}
+                    </span>
                     <span className="text-charcoal/80">
-                      {' '}
                       · Your answer: {optionText(r.questionId, r.chosenOptionId)}
                     </span>
                   </p>
                   {!right && (
-                    <p className="rounded-2xl bg-primary-soft px-3 py-2 text-sm">
-                      <span className="font-bold">Correct answer:</span>{' '}
-                      {optionText(r.questionId, r.correctOptionId)}
+                    <p className="flex items-start gap-2 rounded-2xl bg-primary-soft px-3 py-2 text-sm">
+                      <Lightbulb className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                      <span>
+                        <span className="font-bold">Correct answer:</span>{' '}
+                        {optionText(r.questionId, r.correctOptionId)}
+                      </span>
                     </p>
                   )}
                 </Card>

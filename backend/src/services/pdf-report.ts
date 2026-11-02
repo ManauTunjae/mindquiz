@@ -254,21 +254,24 @@ function drawLeads(doc: Doc, { leads }: ReportInput) {
     });
   };
 
+  // drawRow writes text, and writing text moves the cursor (doc.y). So we remember where the row
+  // starts, and move the cursor to the next row ourselves.
   const drawHeaderRow = () => {
+    const top = doc.y;
     drawRow(
       columns.map((c) => c.title),
-      doc.y,
+      top,
       true,
       false,
     );
-    const y = doc.y + rowHeight;
+    const line = top + rowHeight;
     doc
-      .moveTo(MARGIN, y)
-      .lineTo(MARGIN + contentWidth(doc), y)
+      .moveTo(MARGIN, line)
+      .lineTo(MARGIN + contentWidth(doc), line)
       .lineWidth(0.75)
       .strokeColor(INK)
       .stroke();
-    doc.y = y + 1;
+    doc.y = line + 1;
   };
 
   drawHeaderRow();
@@ -279,6 +282,7 @@ function drawLeads(doc: Doc, { leads }: ReportInput) {
       doc.y = MARGIN;
       drawHeaderRow();
     }
+    const top = doc.y;
     drawRow(
       [
         pdfText(lead.name),
@@ -286,11 +290,11 @@ function drawLeads(doc: Doc, { leads }: ReportInput) {
         `${lead.score} of ${lead.total}`,
         formatUtc(lead.consentAt),
       ],
-      doc.y,
+      top,
       false,
       i % 2 === 1,
     );
-    doc.y += rowHeight;
+    doc.y = top + rowHeight;
   });
 }
 

@@ -19,3 +19,16 @@ body {
   color: var(--color-charcoal);
   font-family: var(--font-sans);
 }
+
+/* Safety net for people who ask for less motion: no animations or transitions in the whole app.
+   (The quiz animations from the motion library are turned down separately, in Quiz.tsx.) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

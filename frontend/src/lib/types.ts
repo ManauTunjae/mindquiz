@@ -46,6 +46,7 @@ export type PublicCampaign = {
   title: string;
   description: string;
   accentColor: string;
+  consentText: string; // the text next to the checkbox of the lead form, saved with the lead
   questions: Array<{
     id: number;
     text: string;

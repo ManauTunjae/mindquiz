@@ -26,3 +26,13 @@ export const submitQuiz = (slug: string, answers: QuizAnswer[]) =>
     { answers },
     publicOptions,
   );
+
+// Send the contact details. The visitor must have ticked the consent box before this is called,
+// so consent is always true here. The backend checks it again.
+export const submitLead = (submissionId: string, lead: { name: string; email: string }) =>
+  request<{ ok: true }>(
+    'POST',
+    `/public/submissions/${encodeURIComponent(submissionId)}/lead`,
+    { ...lead, consent: true },
+    publicOptions,
+  );

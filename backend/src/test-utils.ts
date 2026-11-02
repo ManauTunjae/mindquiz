@@ -42,3 +42,24 @@ export function makeCampaignInput(overrides: Record<string, unknown> = {}) {
     ...overrides,
   };
 }
+
+// A published campaign (3 questions) with one finished quiz submission. Returns the ids.
+// The caller must delete the campaign after the test (this also deletes the submission and lead).
+export async function createCampaignWithSubmission() {
+  const { createCampaign } = await import('./services/campaigns.js');
+  const { submitAnswers } = await import('./services/public-campaigns.js');
+  const { createCampaignSchema } = await import('./validation/campaign.js');
+
+  const campaign = await createCampaign(
+    createCampaignSchema.parse(makeCampaignInput({ status: 'published' })),
+  );
+  const result = await submitAnswers(campaign.slug, {
+    answers: campaign.questions.map((q) => ({
+      questionId: q.id,
+      optionId: q.options.find((o) => o.isCorrect)!.id,
+    })),
+  });
+  if (result.status !== 'ok') throw new Error('could not create a test submission');
+
+  return { campaign, submissionId: result.submissionId };
+}

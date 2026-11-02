@@ -9,7 +9,7 @@ const base =
 
 // Dark text on orange: white on #FF7A00 is only about 2.6:1, dark text gives about 6.4:1.
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-charcoal shadow-sm hover:brightness-95',
+  primary: 'bg-primary text-on-primary shadow-sm hover:brightness-95',
   secondary: 'border border-charcoal/50 bg-surface text-charcoal hover:bg-primary-soft',
   danger: 'border border-red-800 bg-surface text-red-800 hover:bg-red-50',
 };

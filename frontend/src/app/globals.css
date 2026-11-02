@@ -3,6 +3,8 @@
 @theme {
   --color-primary: #ff7a00;
   --color-primary-soft: #ffe3cc;
+  /* Text on top of primary. Dark on orange: white would only give about 2.6:1. */
+  --color-on-primary: #1e1e1e;
   --color-ivory: #f7f4ef;
   --color-surface: #ffffff;
   --color-charcoal: #1e1e1e;

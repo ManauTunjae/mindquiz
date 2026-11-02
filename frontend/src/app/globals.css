@@ -31,6 +31,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* The progress bar of the animated demo on the home page. It is also the timer of the demo. */
+@keyframes step-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 body {
   background: var(--color-ivory);
   color: var(--color-charcoal);

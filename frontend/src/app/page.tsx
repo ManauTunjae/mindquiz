@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Benefits } from '@/components/landing/Benefits';
 import { Footer } from '@/components/landing/Footer';
 import { Hero } from '@/components/landing/Hero';
+import { HowItWorks } from '@/components/landing/how-it-works/HowItWorks';
 import { SampleQuiz } from '@/components/landing/SampleQuiz';
 import { Section } from '@/components/landing/Section';
 import { LandingHeader } from '@/components/landing/LandingHeader';
@@ -25,6 +26,14 @@ export default function HomePage() {
       <main id="main">
         <Hero />
         <Benefits />
+        <Section
+          id="how-it-works"
+          eyebrow="How it works"
+          title="From idea to results in four steps"
+          intro="Create a campaign, add your questions, share the link and see what happened."
+        >
+          <HowItWorks />
+        </Section>
         <Section
           id="try-it"
           eyebrow="Try it"

@@ -60,19 +60,24 @@ The visitor sees right/wrong answers **only at the end** (one submit call).
 
 ### Admin — `/api/admin` (all protected, except login)
 
-| Method | Path                           | What                                                                                                                                   |
-| ------ | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| POST   | `/auth/login`                  | E-mail + password → sets httpOnly session cookie. 10 per 15 min per client.                                                            |
-| POST   | `/auth/logout`                 | Deletes session + cookie                                                                                                               |
-| GET    | `/auth/me`                     | Current admin                                                                                                                          |
-| GET    | `/campaigns`                   | List campaigns (with number of participants)                                                                                           |
-| POST   | `/campaigns`                   | Create campaign with questions and options. The slug is made from the title and never changes.                                         |
-| GET    | `/campaigns/:id`               | One campaign with questions, options and `isCorrect`                                                                                   |
-| PUT    | `/campaigns/:id`               | Update title, description, colour or status (always). Questions can only be changed while the campaign has no participants (else 409). |
-| DELETE | `/campaigns/:id`               | Delete campaign (cascade: questions, submissions, leads)                                                                               |
-| GET    | `/campaigns/:id/stats`         | Participants, average score, number of leads, and for every question how many people chose each answer (count and percent)             |
-| GET    | `/campaigns/:id/leads`         | List of leads (name, e-mail, score, when consent was given), newest first                                                              |
-| DELETE | `/campaigns/:id/leads/:leadId` | Delete one lead. The quiz submission stays, but is no longer linked to a person.                                                       |
+| Method | Path                                     | What                                                                                                                                           |
+| ------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/auth/login`                            | E-mail + password → sets httpOnly session cookie. 10 per 15 min per client.                                                                    |
+| POST   | `/auth/logout`                           | Deletes session + cookie                                                                                                                       |
+| GET    | `/auth/me`                               | Current admin                                                                                                                                  |
+| GET    | `/campaigns`                             | List campaigns (with number of participants)                                                                                                   |
+| POST   | `/campaigns`                             | Create campaign with questions and options. The slug is made from the title and never changes.                                                 |
+| GET    | `/campaigns/:id`                         | One campaign with questions, options and `isCorrect`                                                                                           |
+| PUT    | `/campaigns/:id`                         | Update title, description, colour or status (always). Questions can only be changed while the campaign has no participants (else 409).         |
+| DELETE | `/campaigns/:id`                         | Delete campaign (cascade: questions, submissions, leads)                                                                                       |
+| GET    | `/campaigns/:id/stats`                   | Participants, average score, number of leads, and for every question how many people chose each answer (count and percent)                     |
+| GET    | `/campaigns/:id/leads`                   | List of leads (name, e-mail, score, when consent was given), newest first                                                                      |
+| DELETE | `/campaigns/:id/leads/:leadId`           | Delete one lead. The quiz submission stays, but is no longer linked to a person.                                                               |
+| GET    | `/campaigns/:id/export/leads.csv`        | Download the leads as CSV (name, e-mail, score, consent given and when, consent text). `?delimiter=semicolon` (default) or `comma`.            |
+| GET    | `/campaigns/:id/export/participants.csv` | Download every finished quiz as CSV, with the answer to each question. Name and e-mail only for people who left them. Same `delimiter` option. |
+| GET    | `/campaigns/:id/export/report.pdf`       | Download a PDF report: summary, answers per question and the leads.                                                                            |
+
+The export files contain personal data. They need an admin session, they are never cached (`Cache-Control: no-store`), and text cells that start with `=`, `+`, `-` or `@` get a `'` in front (protection against "CSV injection" in Excel and Sheets). CSV files start with a BOM, so å, ä and ö look right in Excel. Times are in UTC.
 
 ## 4. Frontend pages (Next.js, port 3000)
 
@@ -106,5 +111,5 @@ Every feature: one branch → lint, typecheck, tests pass → PR to `development
 | 11  | ✅     | `feature/polish`                        | Contrast / a11y check, empty states, loading states, README update                                                                                                                                            | Full flow end to end, mobile check                                                                                           |
 | 12  | ✅     | `feature/design-refresh`                | Added after the MVP: IBM Plex Mono for all headings, `lucide-react` icons on all pages, logo (word mark with icon), small UI improvements                                                                     | Open every page (admin, quiz, privacy, 404). Headings are IBM Plex Mono, icons are visible, nothing breaks at 375px          |
 | 13  | ✅     | `feature/landing-page`                  | Added after the MVP: a real home page with hero, benefits, animated how-to (create a campaign and questions), sample questions to try, privacy section, footer                                                | Open `/`: check each section, try the sample questions, use Pause/Play and the step buttons, check 375px and "Reduce motion" |
-| 14  | ⬜     | `feature/export`                        | Added after the MVP: admin can download leads (CSV), all answers (CSV) and a PDF report of a campaign. CSV is protected against formula injection.                                                            | Open a campaign's Results page, download the three files, open the CSV in Excel/Sheets and check the PDF                     |
+| 14  | ✅     | `feature/export`                        | Added after the MVP: admin can download leads (CSV), all answers (CSV) and a PDF report of a campaign. CSV is protected against formula injection.                                                            | Open a campaign's Results page, download the three files, open the CSV in Excel/Sheets and check the PDF                     |
 | —   | ⬜     | release PR                              | PR `development` → `main` (after your OK)                                                                                                                                                                     | —                                                                                                                            |

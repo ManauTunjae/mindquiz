@@ -5,7 +5,7 @@ A fictional practice SaaS app (test project) for non-profit organisations.
 - **Admin** creates quiz campaigns: title, description, accent colour and 3–5 questions.
 - **Visitor** opens a public link (`/c/<slug>`), answers one question at a time and sees the result with a review of every answer.
 - After the quiz the visitor can leave **name + e-mail + GDPR consent** (optional).
-- **Dashboard** shows participants, average score, answers per question and the leads. A lead can be deleted.
+- **Dashboard** shows participants, average score, answers per question and the leads. A lead can be deleted. The data can be downloaded as **CSV** (leads, or all answers) and as a **PDF report**.
 
 The quiz questions are general knowledge questions. The app never asks about a visitor's own health and never stores health data.
 
@@ -102,6 +102,7 @@ The full list of API endpoints, pages and the data model is in [docs/PLAN.md](do
 - Everything under `/api/admin/*` needs a session. CORS only allows `http://localhost:3000`.
 - Public routes never return the correct answers before the visitor has answered. The score is counted on the **server**.
 - Rate limits on login, quiz submit and the lead form. Small limits on the size of request bodies.
+- Export files need an admin session and are never cached. Names are typed by visitors, so text that starts with `=`, `+`, `-` or `@` gets a `'` in front in the CSV files (protection against formulas in Excel and Sheets).
 - The consent box is **not** ticked from the start. The exact consent text and the time are saved with the lead, and both are set by the server.
 - No IP addresses are stored. Visitors get no cookies.
 - The privacy page (`/privacy`) explains what is stored, why, and how to ask for deletion. An admin can delete a lead in the dashboard.
@@ -111,7 +112,8 @@ The full list of API endpoints, pages and the data model is in [docs/PLAN.md](do
 
 - The rate limit lives in memory, so it works for one server process. Behind a proxy or on several servers it needs a shared store and the real client address.
 - "Participants" are finished quizzes. The same person can be counted twice, because visitors do not log in.
-- The lead list shows all leads (no pages) and there is no CSV export.
+- The lead list shows all leads (no pages). The export files are built in memory, which is fine for thousands of rows but not for millions.
+- The PDF report uses a built-in font. Western European letters (å, ä, ö, é, ü) work, but other letters (for example Cyrillic or the Polish Ł) are shown as `?` in the PDF. The CSV files keep every letter.
 - The frontend has no automated tests. The backend has Vitest tests.
 - `npm audit` still reports moderate advisories in development tools (ESLint plugins, esbuild). None of them are in the code that runs for users.
 

@@ -45,7 +45,7 @@ Then open:
 
 | What             | URL                                      |
 | ---------------- | ---------------------------------------- |
-| Start page       | http://localhost:3000                    |
+| Home page        | http://localhost:3000                    |
 | Demo quiz        | http://localhost:3000/c/wellbeing-basics |
 | Admin login      | http://localhost:3000/admin/login        |
 | API health check | http://localhost:8000/api/health         |

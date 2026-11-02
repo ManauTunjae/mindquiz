@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Quiz } from '@/components/quiz/Quiz';
 import { accentStyle } from '@/lib/accent';
 import { getPublicCampaign } from '@/lib/public-api';
 
@@ -27,9 +28,7 @@ export default async function QuizPage({ params }: Props) {
 
   return (
     <div style={accentStyle(campaign.accentColor)} className="min-h-screen">
-      <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center px-4 py-10">
-        <h1 className="font-serif text-3xl font-semibold">{campaign.title}</h1>
-      </main>
+      <Quiz campaign={campaign} />
     </div>
   );
 }

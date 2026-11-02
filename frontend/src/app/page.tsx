@@ -1,14 +1,28 @@
-import Link from 'next/link';
-import { buttonClasses } from '@/components/ui/button';
+import type { Metadata } from 'next';
+import { Footer } from '@/components/landing/Footer';
+import { Hero } from '@/components/landing/Hero';
+import { LandingHeader } from '@/components/landing/LandingHeader';
+
+export const metadata: Metadata = {
+  title: { absolute: 'MindQuiz · Friendly quizzes for non-profit organisations' },
+  description:
+    'Create a short quiz, share it with one link and see what your visitors know. Calm design and privacy built in.',
+};
 
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center gap-6 p-6 text-center">
-      <h1 className="font-heading text-4xl font-semibold">MindQuiz</h1>
-      <p className="text-lg">Short quizzes that help people learn something new.</p>
-      <Link href="/admin/login" className={buttonClasses('primary')}>
-        Admin login
-      </Link>
-    </main>
+    <>
+      <a
+        href="#main"
+        className="sr-only z-30 rounded-xl bg-charcoal px-4 py-2 font-bold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        Skip to content
+      </a>
+      <LandingHeader />
+      <main id="main">
+        <Hero />
+      </main>
+      <Footer />
+    </>
   );
 }

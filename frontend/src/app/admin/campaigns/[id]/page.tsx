@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Gauge, Mail, Pencil, Share2, Users, type LucideIcon } from 'lucide-react';
+import { ExportCard } from '@/components/dashboard/ExportCard';
 import { LeadList } from '@/components/dashboard/LeadList';
 import { QuestionStats } from '@/components/dashboard/QuestionStats';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -122,6 +123,8 @@ export default function CampaignDashboardPage() {
           </p>
         </Card>
       )}
+
+      <ExportCard campaignId={campaign.id} participants={stats.participants} leads={leads.length} />
 
       <QuestionStats stats={stats} />
 

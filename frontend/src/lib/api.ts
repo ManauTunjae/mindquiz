@@ -29,6 +29,18 @@ type RequestOptions = {
   credentials?: RequestCredentials;
 };
 
+// Turn a response that was not ok into an ApiError with the message from the server.
+async function failureFrom(res: Response): Promise<ApiError> {
+  let message = 'Something went wrong';
+  try {
+    const data = await res.json();
+    if (typeof data.error === 'string') message = data.error;
+  } catch {
+    // The body was not JSON. Keep the default message.
+  }
+  return new ApiError(res.status, message);
+}
+
 export async function request<T>(
   method: string,
   path: string,
@@ -48,18 +60,57 @@ export async function request<T>(
     throw new ApiError(0, 'Cannot reach the server. Is the backend running?');
   }
 
-  if (!res.ok) {
-    let message = 'Something went wrong';
-    try {
-      const data = await res.json();
-      if (typeof data.error === 'string') message = data.error;
-    } catch {
-      // The body was not JSON. Keep the default message.
-    }
-    throw new ApiError(res.status, message);
-  }
+  if (!res.ok) throw await failureFrom(res);
 
   return res.json();
+}
+
+// --- downloads (CSV and PDF) -----------------------------------------------------------------
+
+export type ExportKind = 'leads' | 'participants' | 'report';
+export type CsvSeparator = 'semicolon' | 'comma';
+
+const exportFiles: Record<ExportKind, string> = {
+  leads: 'leads.csv',
+  participants: 'participants.csv',
+  report: 'report.pdf',
+};
+
+// attachment; filename="mindquiz-wellbeing-basics-leads-2026-11-02.csv"  ->  the file name
+function filenameFrom(header: string | null): string | null {
+  const match = header ? /filename="([^"]+)"/.exec(header) : null;
+  return match ? match[1] : null;
+}
+
+// Ask the server for a file and save it on the computer of the admin.
+// We use fetch (and not a plain link), so a problem is shown as a message and not as a JSON page.
+export async function downloadExport(
+  campaignId: string,
+  kind: ExportKind,
+  separator: CsvSeparator = 'semicolon',
+): Promise<string> {
+  const query = kind === 'report' ? '' : `?delimiter=${separator}`;
+  let res: Response;
+  try {
+    res = await fetch(
+      `${API_URL}/api/admin/campaigns/${campaignId}/export/${exportFiles[kind]}${query}`,
+      { credentials: 'include', cache: 'no-store' },
+    );
+  } catch {
+    throw new ApiError(0, 'Cannot reach the server. Is the backend running?');
+  }
+  if (!res.ok) throw await failureFrom(res);
+
+  const filename = filenameFrom(res.headers.get('content-disposition')) ?? `mindquiz-${kind}`;
+  const url = URL.createObjectURL(await res.blob());
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return filename;
 }
 
 export const adminApi = {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { QuestionStats } from '@/components/dashboard/QuestionStats';
 import { StatusBadge } from '@/components/StatusBadge';
 import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -110,6 +111,8 @@ export default function CampaignDashboardPage() {
           </p>
         </Card>
       )}
+
+      <QuestionStats stats={stats} />
     </div>
   );
 }

@@ -31,38 +31,48 @@ Rules (checked with Zod and in the service):
 - A question has **2–4 options** and **exactly 1 correct** option.
 - Schema changes only through Drizzle migrations.
 
+The database also enforces some of these rules itself:
+
+- at most one correct option per question (partial unique index)
+- `consent` must be `true` in `leads` (check constraint)
+- one lead per submission (unique `submission_id`)
+- unique positions of questions in a campaign and of options in a question
+- `submissions.id` is a uuid, because it is used in a public URL
+
 ## 3. API endpoints (backend, port 8000)
 
-Errors always look like `{ "error": "message" }` with status 400, 401, 404, 409 or 500.
+Errors always look like `{ "error": "message" }` with status 400, 401, 404, 409, 413, 429 or 500.
+JSON field names are camelCase (`isCorrect`, `questionId`). The database columns are snake_case.
 
 ### Health
 
 - `GET /api/health` → `{ "status": "ok" }`
 
-### Public — `/api/public`
+### Public — `/api/public` (no login)
 
-| Method | Path                           | What                                                                                                                                                                                          |
-| ------ | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/campaigns/:slug`             | Published campaign with questions and options. **No `is_correct`.**                                                                                                                           |
-| POST   | `/campaigns/:slug/submissions` | Body `{ answers: [{ questionId, optionId }] }`. Backend calculates score. Returns `{ submissionId, score, total, results: [{ questionId, chosenOptionId, correctOptionId }] }`. Rate-limited. |
-| POST   | `/submissions/:id/lead`        | Body `{ name, email, consent: true }`. 201 created, 409 if a lead already exists. Rate-limited.                                                                                               |
+| Method | Path                           | What                                                                                                                                                                                                                                                                                                                                          |
+| ------ | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/campaigns/:slug`             | Published campaign with questions and options, and the `consentText` for the lead form. **No `isCorrect`.** A draft and an unknown slug both give 404.                                                                                                                                                                                        |
+| POST   | `/campaigns/:slug/submissions` | Body `{ answers: [{ questionId, optionId }] }`. Every question must be answered once, and every answer must belong to its question (else 400, nothing saved). The score is counted on the server. 201 `{ submissionId, score, total, results: [{ questionId, chosenOptionId, correctOptionId }] }`. 30 per 15 min per client, body max 10 KB. |
+| POST   | `/submissions/:id/lead`        | Body `{ name, email, consent: true }`. `consent` must be exactly `true`. The server sets the consent text and the time. 201 `{ ok: true }`, 400, 404 (unknown submission), 409 (a lead already exists). 10 per 15 min per client, body max 4 KB.                                                                                              |
 
 The visitor sees right/wrong answers **only at the end** (one submit call).
 
 ### Admin — `/api/admin` (all protected, except login)
 
-| Method | Path                   | What                                                         |
-| ------ | ---------------------- | ------------------------------------------------------------ |
-| POST   | `/auth/login`          | E-mail + password → sets httpOnly session cookie             |
-| POST   | `/auth/logout`         | Deletes session + cookie                                     |
-| GET    | `/auth/me`             | Current admin                                                |
-| GET    | `/campaigns`           | List campaigns (with number of participants)                 |
-| POST   | `/campaigns`           | Create campaign with questions and options                   |
-| GET    | `/campaigns/:id`       | One campaign with questions, options and `is_correct`        |
-| PUT    | `/campaigns/:id`       | Update campaign (title, colour, status, questions)           |
-| DELETE | `/campaigns/:id`       | Delete campaign (cascade)                                    |
-| GET    | `/campaigns/:id/stats` | Participants, average score, answers per option per question |
-| GET    | `/campaigns/:id/leads` | List of leads                                                |
+| Method | Path                           | What                                                                                                                                   |
+| ------ | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/auth/login`                  | E-mail + password → sets httpOnly session cookie. 10 per 15 min per client.                                                            |
+| POST   | `/auth/logout`                 | Deletes session + cookie                                                                                                               |
+| GET    | `/auth/me`                     | Current admin                                                                                                                          |
+| GET    | `/campaigns`                   | List campaigns (with number of participants)                                                                                           |
+| POST   | `/campaigns`                   | Create campaign with questions and options. The slug is made from the title and never changes.                                         |
+| GET    | `/campaigns/:id`               | One campaign with questions, options and `isCorrect`                                                                                   |
+| PUT    | `/campaigns/:id`               | Update title, description, colour or status (always). Questions can only be changed while the campaign has no participants (else 409). |
+| DELETE | `/campaigns/:id`               | Delete campaign (cascade: questions, submissions, leads)                                                                               |
+| GET    | `/campaigns/:id/stats`         | Participants, average score, number of leads, and for every question how many people chose each answer (count and percent)             |
+| GET    | `/campaigns/:id/leads`         | List of leads (name, e-mail, score, when consent was given), newest first                                                              |
+| DELETE | `/campaigns/:id/leads/:leadId` | Delete one lead. The quiz submission stays, but is no longer linked to a person.                                                       |
 
 ## 4. Frontend pages (Next.js, port 3000)
 
@@ -93,5 +103,5 @@ Every feature: one branch → lint, typecheck, tests pass → PR to `development
 | 8   | ✅     | `feature/public-quiz-ui`                | Quiz flow, progress bar, fade/slide, result card, confetti, accent colour, `prefers-reduced-motion`                                                                                                           | Browser `/c/<slug>` on desktop and 375px; turn on "reduce motion" in macOS → no confetti                                    |
 | 9   | ✅     | `feature/lead-form`                     | Lead API + form, consent not pre-checked, store consent text + time, privacy page, rate limit                                                                                                                 | Send a lead; without consent → error; second time → 409                                                                     |
 | 10  | ✅     | `feature/admin-dashboard`               | Stats + leads API, dashboard page                                                                                                                                                                             | Do 2–3 quizzes, check the numbers and leads on the dashboard                                                                |
-| 11  | ⬜     | `feature/polish`                        | Contrast / a11y check, empty states, loading states, README update                                                                                                                                            | Full flow end to end, mobile check                                                                                          |
+| 11  | ✅     | `feature/polish`                        | Contrast / a11y check, empty states, loading states, README update                                                                                                                                            | Full flow end to end, mobile check                                                                                          |
 | —   | ⬜     | release PR                              | PR `development` → `main` (after your OK)                                                                                                                                                                     | —                                                                                                                           |

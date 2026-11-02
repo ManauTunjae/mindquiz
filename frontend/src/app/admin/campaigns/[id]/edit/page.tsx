@@ -8,6 +8,7 @@ import { buttonClasses } from '@/components/ui/button';
 import { adminApi, ApiError, errorMessage, isUnauthorized } from '@/lib/api';
 import { detailToForm } from '@/lib/campaign-form';
 import type { CampaignInput } from '@/lib/types';
+import { Loading } from '@/components/ui/loading';
 
 export default function EditCampaignPage() {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function EditCampaignPage() {
           {error}
         </p>
       )}
-      {!error && !initial && <p className="text-charcoal/70">Loading…</p>}
+      {!error && !initial && <Loading />}
 
       {initial && (
         <CampaignForm

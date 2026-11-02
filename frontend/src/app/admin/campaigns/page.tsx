@@ -8,6 +8,7 @@ import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { adminApi, errorMessage, isUnauthorized } from '@/lib/api';
 import type { CampaignListItem } from '@/lib/types';
+import { Loading } from '@/components/ui/loading';
 
 export default function CampaignsPage() {
   const router = useRouter();
@@ -49,7 +50,7 @@ export default function CampaignsPage() {
         </p>
       )}
 
-      {!error && campaigns === null && <p className="text-charcoal/70">Loading…</p>}
+      {!error && campaigns === null && <Loading />}
 
       {campaigns?.length === 0 && (
         <Card className="text-center">

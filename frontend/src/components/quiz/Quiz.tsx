@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { ApiError } from '@/lib/api';
 import { submitQuiz } from '@/lib/public-api';
@@ -191,6 +192,17 @@ export function Quiz({ campaign }: { campaign: PublicCampaign }) {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <footer className="mt-8 text-center text-sm">
+          <Link
+            href="/privacy"
+            target="_blank"
+            rel="noopener"
+            className="underline underline-offset-2"
+          >
+            Privacy<span className="sr-only"> (opens in a new tab)</span>
+          </Link>
+        </footer>
       </main>
     </MotionConfig>
   );

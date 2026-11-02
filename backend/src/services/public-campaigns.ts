@@ -8,6 +8,7 @@ import {
   submissions,
 } from '../db/schema.js';
 import type { SubmitAnswersInput } from '../validation/submission.js';
+import { CONSENT_TEXT } from './consent.js';
 
 // What a visitor may see. There is no isCorrect here, on purpose.
 export type PublicCampaign = {
@@ -15,6 +16,7 @@ export type PublicCampaign = {
   title: string;
   description: string;
   accentColor: string;
+  consentText: string; // shown next to the checkbox of the lead form
   questions: Array<{
     id: number;
     text: string;
@@ -56,6 +58,7 @@ export async function getPublicCampaign(slug: string): Promise<PublicCampaign | 
     title: campaign.title,
     description: campaign.description,
     accentColor: campaign.accentColor,
+    consentText: CONSENT_TEXT,
     questions: questionRows.map((q) => ({
       id: q.id,
       text: q.text,

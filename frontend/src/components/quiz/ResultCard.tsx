@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import type { PublicCampaign, QuizResult } from '@/lib/types';
 import { Card } from '../ui/card';
 import { fireConfetti } from './confetti';
+import { LeadForm } from './LeadForm';
 
 type Props = { campaign: PublicCampaign; result: QuizResult };
 
@@ -92,6 +93,14 @@ export function ResultCard({ campaign, result }: Props) {
           })}
         </ol>
       </motion.section>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.4 }}
+      >
+        <LeadForm submissionId={result.submissionId} consentText={campaign.consentText} />
+      </motion.div>
     </div>
   );
 }

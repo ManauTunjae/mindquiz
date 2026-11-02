@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { bodyLimit } from 'hono/body-limit';
+import { limitBody } from '../../middleware/body-limit.js';
 import { HttpError } from '../../middleware/error-handler.js';
 import { rateLimit } from '../../middleware/rate-limit.js';
 import { getPublicCampaign, submitAnswers } from '../../services/public-campaigns.js';
@@ -12,13 +12,8 @@ export const publicCampaignRoutes = new Hono();
 // 30 submissions per 15 minutes per client. Schools and offices share one address, so not too low.
 const submitLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 30 });
 
-// A quiz answer is tiny. Refuse big bodies before we read them.
-const smallBody = bodyLimit({
-  maxSize: 10 * 1024,
-  onError: () => {
-    throw new HttpError(413, 'Request body is too large');
-  },
-});
+// A quiz answer is tiny.
+const smallBody = limitBody(10 * 1024);
 
 publicCampaignRoutes.get('/campaigns/:slug', async (c) => {
   const campaign = await getPublicCampaign(c.req.param('slug'));

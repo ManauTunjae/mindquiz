@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const loginSchema = z.object({
-  email: z.email().trim().toLowerCase(),
+  // Clean first (spaces, capital letters), then check. A space at the end must not cause an error.
+  email: z.string().trim().toLowerCase().pipe(z.email()),
   password: z.string().min(1, 'Password is required').max(200),
 });
 

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { Benefits } from '@/components/landing/Benefits';
+import { FinalCta } from '@/components/landing/FinalCta';
 import { Footer } from '@/components/landing/Footer';
 import { Hero } from '@/components/landing/Hero';
 import { HowItWorks } from '@/components/landing/how-it-works/HowItWorks';
+import { PrivacySection } from '@/components/landing/PrivacySection';
 import { SampleQuiz } from '@/components/landing/SampleQuiz';
 import { Section } from '@/components/landing/Section';
 import { LandingHeader } from '@/components/landing/LandingHeader';
@@ -31,6 +33,7 @@ export default function HomePage() {
           eyebrow="How it works"
           title="From idea to results in four steps"
           intro="Create a campaign, add your questions, share the link and see what happened."
+          className="border-y border-mist/60 bg-surface/70"
         >
           <HowItWorks />
         </Section>
@@ -39,10 +42,11 @@ export default function HomePage() {
           eyebrow="Try it"
           title="Answer a sample question"
           intro="This is what your visitors will see: one question at a time, with the right answer at the end."
-          className="border-y border-mist/60 bg-surface/70"
         >
           <SampleQuiz />
         </Section>
+        <PrivacySection />
+        <FinalCta />
       </main>
       <Footer />
     </>

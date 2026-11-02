@@ -10,6 +10,7 @@ import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { adminApi, ApiError, errorMessage, isUnauthorized } from '@/lib/api';
 import type { CampaignDetail, CampaignStats, Lead } from '@/lib/types';
+import { Loading } from '@/components/ui/loading';
 
 type Data = { campaign: CampaignDetail; stats: CampaignStats; leads: Lead[] };
 
@@ -65,7 +66,7 @@ export default function CampaignDashboardPage() {
     );
   }
 
-  if (!data) return <p className="text-charcoal/70">Loading…</p>;
+  if (!data) return <Loading />;
 
   const { campaign, stats, leads } = data;
 

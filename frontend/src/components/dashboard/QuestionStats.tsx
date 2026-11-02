@@ -16,7 +16,7 @@ export function QuestionStats({ stats }: { stats: CampaignStats }) {
 
   return (
     <section aria-labelledby="answers-heading" className="flex flex-col gap-3">
-      <h2 id="answers-heading" className="font-serif text-2xl font-semibold">
+      <h2 id="answers-heading" className="font-heading text-2xl font-semibold">
         Answers per question
       </h2>
 

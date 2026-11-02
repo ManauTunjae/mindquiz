@@ -18,7 +18,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <Card className="flex flex-col gap-1 p-4 sm:p-5">
       <dt className="text-sm font-bold text-charcoal/80">{label}</dt>
-      <dd className="font-serif text-4xl font-semibold">{value}</dd>
+      <dd className="font-heading text-4xl font-semibold">{value}</dd>
     </Card>
   );
 }
@@ -50,7 +50,7 @@ export default function CampaignDashboardPage() {
   if (notFound) {
     return (
       <div className="flex flex-col items-start gap-4">
-        <h1 className="font-serif text-3xl font-semibold">Campaign not found</h1>
+        <h1 className="font-heading text-3xl font-semibold">Campaign not found</h1>
         <Link href="/admin/campaigns" className={buttonClasses('secondary')}>
           Back to campaigns
         </Link>
@@ -80,7 +80,7 @@ export default function CampaignDashboardPage() {
           ← Campaigns
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <h1 className="font-serif text-3xl font-semibold">{campaign.title}</h1>
+          <h1 className="font-heading text-3xl font-semibold">{campaign.title}</h1>
           <StatusBadge status={campaign.status} />
         </div>
         <div className="flex flex-wrap gap-3">

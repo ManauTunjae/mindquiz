@@ -152,7 +152,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
 
       <section className="flex flex-col gap-4" aria-labelledby="questions-heading">
         <div>
-          <h2 id="questions-heading" className="font-serif text-2xl font-semibold">
+          <h2 id="questions-heading" className="font-heading text-2xl font-semibold">
             Questions
           </h2>
           <p className="text-sm text-charcoal/70">

@@ -12,7 +12,7 @@ export default function NewCampaignPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-3xl font-semibold">New campaign</h1>
+      <h1 className="font-heading text-3xl font-semibold">New campaign</h1>
       <CampaignForm
         initial={initial}
         submitLabel="Create campaign"

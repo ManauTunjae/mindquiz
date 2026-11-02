@@ -65,7 +65,7 @@ export function CampaignRow({ campaign, onChange, onDeleted }: Props) {
   return (
     <Card className="flex flex-col gap-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <h2 className="font-serif text-xl font-semibold">{campaign.title}</h2>
+        <h2 className="font-heading text-xl font-semibold">{campaign.title}</h2>
         <StatusBadge status={campaign.status} />
       </div>
 

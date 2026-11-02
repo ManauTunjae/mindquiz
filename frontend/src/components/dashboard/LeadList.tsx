@@ -78,7 +78,7 @@ export function LeadList({ campaignId, leads, onDeleted }: Props) {
 
   return (
     <section aria-labelledby="leads-heading" className="flex flex-col gap-3">
-      <h2 id="leads-heading" className="font-serif text-2xl font-semibold">
+      <h2 id="leads-heading" className="font-heading text-2xl font-semibold">
         Leads
       </h2>
 

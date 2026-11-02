@@ -23,7 +23,7 @@ export function QuestionStep({ question, selectedOptionId, onSelect }: Props) {
         id={headingId}
         ref={headingRef}
         tabIndex={-1}
-        className="font-serif text-2xl font-semibold leading-snug outline-none sm:text-3xl"
+        className="font-heading text-xl font-semibold leading-snug outline-none sm:text-2xl"
       >
         {question.text}
       </h2>

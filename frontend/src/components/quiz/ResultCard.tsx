@@ -46,7 +46,7 @@ export function ResultCard({ campaign, result }: Props) {
           <h1
             ref={headingRef}
             tabIndex={-1}
-            className="font-serif text-4xl font-semibold outline-none"
+            className="font-heading text-3xl font-semibold outline-none sm:text-4xl"
           >
             You got {result.score} of {result.total}
           </h1>
@@ -61,7 +61,7 @@ export function ResultCard({ campaign, result }: Props) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.4 }}
       >
-        <h2 id="review-heading" className="font-serif text-2xl font-semibold">
+        <h2 id="review-heading" className="font-heading text-2xl font-semibold">
           Your answers
         </h2>
         <ol className="flex flex-col gap-3">

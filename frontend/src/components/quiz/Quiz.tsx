@@ -97,7 +97,7 @@ export function Quiz({ campaign }: { campaign: PublicCampaign }) {
               transition={{ duration: 0.25, ease: 'easeOut' }}
             >
               <Card className="flex flex-col gap-5">
-                <h1 className="font-serif text-3xl font-semibold">{campaign.title}</h1>
+                <h1 className="font-heading text-3xl font-semibold">{campaign.title}</h1>
                 {campaign.description && (
                   <p className="text-lg text-charcoal/80">{campaign.description}</p>
                 )}

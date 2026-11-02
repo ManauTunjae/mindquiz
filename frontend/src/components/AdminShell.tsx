@@ -26,7 +26,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
           <Link
             href="/admin/campaigns"
-            className="font-serif text-xl font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-charcoal"
+            className="font-heading text-xl font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-charcoal"
           >
             MindQuiz <span className="text-sm font-normal text-charcoal/70">admin</span>
           </Link>

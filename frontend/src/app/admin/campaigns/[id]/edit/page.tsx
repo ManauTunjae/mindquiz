@@ -38,7 +38,7 @@ export default function EditCampaignPage() {
   if (notFound) {
     return (
       <div className="flex flex-col items-start gap-4">
-        <h1 className="font-serif text-3xl font-semibold">Campaign not found</h1>
+        <h1 className="font-heading text-3xl font-semibold">Campaign not found</h1>
         <Link href="/admin/campaigns" className={buttonClasses('secondary')}>
           Back to campaigns
         </Link>
@@ -48,7 +48,7 @@ export default function EditCampaignPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-3xl font-semibold">Edit campaign</h1>
+      <h1 className="font-heading text-3xl font-semibold">Edit campaign</h1>
 
       {error && (
         <p

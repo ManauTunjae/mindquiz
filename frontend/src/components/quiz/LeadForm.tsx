@@ -59,7 +59,7 @@ export function LeadForm({ submissionId, consentText }: Props) {
   if (done) {
     return (
       <Card role="status" className="text-center">
-        <h2 className="font-serif text-2xl font-semibold">Thank you!</h2>
+        <h2 className="font-heading text-2xl font-semibold">Thank you!</h2>
         <p className="mt-2 text-charcoal/80">
           {done === 'saved'
             ? 'We saved your details.'
@@ -73,7 +73,7 @@ export function LeadForm({ submissionId, consentText }: Props) {
     <Card>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
         <div className="flex flex-col gap-2">
-          <h2 className="font-serif text-2xl font-semibold">Stay in touch</h2>
+          <h2 className="font-heading text-2xl font-semibold">Stay in touch</h2>
           <p className="text-charcoal/80">
             Want to hear from the organisation? Leave your details. This is optional.
           </p>

@@ -1,6 +1,6 @@
-import { eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { db } from '../db/client.js';
-import { leads, submissions } from '../db/schema.js';
+import { campaigns, leads, submissions } from '../db/schema.js';
 import type { LeadInput } from '../validation/lead.js';
 import { CONSENT_TEXT } from './consent.js';
 import { isUuid } from './ids.js';
@@ -52,4 +52,53 @@ export async function createLead(
     if (hasPgCode(err, '23503')) return { status: 'not_found' };
     throw err;
   }
+}
+
+export type LeadRow = {
+  id: number;
+  name: string;
+  email: string;
+  score: number;
+  total: number;
+  consentAt: Date;
+  createdAt: Date;
+};
+
+// The leads of one campaign, newest first. Returns null if the campaign does not exist.
+export async function listLeads(campaignId: string): Promise<LeadRow[] | null> {
+  if (!isUuid(campaignId)) return null;
+
+  const [campaign] = await db
+    .select({ id: campaigns.id })
+    .from(campaigns)
+    .where(eq(campaigns.id, campaignId));
+  if (!campaign) return null;
+
+  return db
+    .select({
+      id: leads.id,
+      name: leads.name,
+      email: leads.email,
+      score: submissions.score,
+      total: submissions.total,
+      consentAt: leads.consentAt,
+      createdAt: leads.createdAt,
+    })
+    .from(leads)
+    .innerJoin(submissions, eq(leads.submissionId, submissions.id))
+    .where(eq(leads.campaignId, campaignId))
+    .orderBy(desc(leads.createdAt), desc(leads.id));
+}
+
+// Delete one lead (a person asked to be deleted). Only the name and e-mail go away.
+// The quiz submission stays, but nothing links it to the person any more.
+// The campaign id must match, so a lead of another campaign cannot be deleted by mistake.
+export async function deleteLead(campaignId: string, leadId: number): Promise<boolean> {
+  if (!isUuid(campaignId)) return false;
+
+  const deleted = await db
+    .delete(leads)
+    .where(and(eq(leads.id, leadId), eq(leads.campaignId, campaignId)))
+    .returning({ id: leads.id });
+  return deleted.length > 0;
 }

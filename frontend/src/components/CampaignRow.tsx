@@ -119,6 +119,9 @@ export function CampaignRow({ campaign, onChange, onDeleted }: Props) {
         </div>
       ) : (
         <div className="flex flex-wrap gap-3">
+          <Link href={`/admin/campaigns/${campaign.id}`} className={buttonClasses('secondary')}>
+            Results
+          </Link>
           <Link
             href={`/admin/campaigns/${campaign.id}/edit`}
             className={buttonClasses('secondary')}

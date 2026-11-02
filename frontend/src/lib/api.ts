@@ -1,4 +1,11 @@
-import type { Admin, CampaignDetail, CampaignInput, CampaignListItem } from './types';
+import type {
+  Admin,
+  CampaignDetail,
+  CampaignInput,
+  CampaignListItem,
+  CampaignStats,
+  Lead,
+} from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
@@ -69,4 +76,10 @@ export const adminApi = {
   updateCampaign: (id: string, input: Partial<CampaignInput>) =>
     request<{ campaign: CampaignDetail }>('PUT', `/admin/campaigns/${id}`, input),
   deleteCampaign: (id: string) => request<{ ok: true }>('DELETE', `/admin/campaigns/${id}`),
+
+  getStats: (id: string) =>
+    request<{ stats: CampaignStats }>('GET', `/admin/campaigns/${id}/stats`),
+  listLeads: (id: string) => request<{ leads: Lead[] }>('GET', `/admin/campaigns/${id}/leads`),
+  deleteLead: (campaignId: string, leadId: number) =>
+    request<{ ok: true }>('DELETE', `/admin/campaigns/${campaignId}/leads/${leadId}`),
 };

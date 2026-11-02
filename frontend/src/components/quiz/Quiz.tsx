@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { ProgressBar } from './ProgressBar';
 import { QuestionStep } from './QuestionStep';
+import { ResultCard } from './ResultCard';
 
 type Phase = 'intro' | 'questions' | 'result';
 
@@ -119,13 +120,7 @@ export function Quiz({ campaign }: { campaign: PublicCampaign }) {
         </>
       )}
 
-      {phase === 'result' && result && (
-        <Card aria-live="polite">
-          <h1 className="font-serif text-3xl font-semibold">
-            You got {result.score} of {result.total}
-          </h1>
-        </Card>
-      )}
+      {phase === 'result' && result && <ResultCard campaign={campaign} result={result} />}
     </main>
   );
 }

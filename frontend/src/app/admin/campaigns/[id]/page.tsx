@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { LeadList } from '@/components/dashboard/LeadList';
 import { QuestionStats } from '@/components/dashboard/QuestionStats';
 import { StatusBadge } from '@/components/StatusBadge';
 import { buttonClasses } from '@/components/ui/button';
@@ -113,6 +114,14 @@ export default function CampaignDashboardPage() {
       )}
 
       <QuestionStats stats={stats} />
+
+      <LeadList
+        campaignId={campaign.id}
+        leads={leads}
+        onDeleted={(leadId) =>
+          setData((d) => d && { ...d, leads: d.leads.filter((l) => l.id !== leadId) })
+        }
+      />
     </div>
   );
 }

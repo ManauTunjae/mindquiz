@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ChartColumn, Check } from 'lucide-react';
 import type { CampaignStats } from '@/lib/types';
 import { Card } from '../ui/card';
+import { IconBubble } from '../ui/icon-bubble';
 
 // How many people chose each answer. The numbers are written as text, and the right answer has
 // the words "correct", so nothing depends on colour only.
@@ -16,7 +18,11 @@ export function QuestionStats({ stats }: { stats: CampaignStats }) {
 
   return (
     <section aria-labelledby="answers-heading" className="flex flex-col gap-3">
-      <h2 id="answers-heading" className="font-heading text-2xl font-semibold">
+      <h2
+        id="answers-heading"
+        className="flex items-center gap-3 font-heading text-2xl font-semibold"
+      >
+        <IconBubble icon={ChartColumn} size="sm" />
         Answers per question
       </h2>
 
@@ -43,7 +49,8 @@ export function QuestionStats({ stats }: { stats: CampaignStats }) {
                         {option.text}
                         {option.isCorrect && (
                           <span className="ml-2 inline-block rounded-full bg-primary-soft px-2 py-0.5 text-xs font-bold">
-                            ✓ correct
+                            <Check className="size-3" aria-hidden="true" />
+                            correct
                           </span>
                         )}
                       </p>

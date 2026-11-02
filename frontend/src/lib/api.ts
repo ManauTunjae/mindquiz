@@ -17,12 +17,23 @@ export function errorMessage(err: unknown): string {
   return err instanceof Error ? err.message : 'Something went wrong';
 }
 
-async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+type RequestOptions = {
+  // Admin calls send the session cookie. Public calls must not.
+  credentials?: RequestCredentials;
+};
+
+export async function request<T>(
+  method: string,
+  path: string,
+  body?: unknown,
+  { credentials = 'include' }: RequestOptions = {},
+): Promise<T> {
   let res: Response;
   try {
     res = await fetch(`${API_URL}/api${path}`, {
       method,
-      credentials: 'include', // send the session cookie
+      credentials,
+      cache: 'no-store',
       headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body),
     });

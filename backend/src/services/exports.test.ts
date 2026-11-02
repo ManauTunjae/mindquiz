@@ -5,7 +5,7 @@ import { createCampaignSchema } from '../validation/campaign.js';
 import { leadSchema } from '../validation/lead.js';
 import { createCampaign, deleteCampaign, type CampaignDetail } from './campaigns.js';
 import { CONSENT_TEXT } from './consent.js';
-import { buildLeadsCsv, buildParticipantsCsv } from './exports.js';
+import { buildLeadsCsv, buildParticipantsCsv, buildReportFile } from './exports.js';
 import { createLead } from './leads.js';
 import { submitAnswers } from './public-campaigns.js';
 
@@ -206,5 +206,29 @@ describe('buildParticipantsCsv', () => {
   it('returns null for an unknown campaign', async () => {
     expect(await buildParticipantsCsv('00000000-0000-4000-8000-000000000000', ';')).toBeNull();
     expect(await buildParticipantsCsv('not-a-uuid', ';')).toBeNull();
+  });
+});
+
+describe('buildReportFile', () => {
+  it('makes a PDF named after the campaign and the day', async () => {
+    const campaign = await create();
+    await addLead(await takeQuiz(campaign, [true, true, true]), 'Anna', 'anna@example.com');
+
+    const file = (await buildReportFile(campaign.id, 'admin@example.com', NOW))!;
+
+    expect(file.filename).toBe(`mindquiz-${campaign.slug}-report-2026-11-02.pdf`);
+    expect(file.body.subarray(0, 5).toString()).toBe('%PDF-');
+    expect(file.body.subarray(-6).toString().trim()).toBe('%%EOF');
+  });
+
+  it('also works for a campaign that nobody has answered', async () => {
+    const campaign = await create();
+    const file = (await buildReportFile(campaign.id, 'admin@example.com', NOW))!;
+    expect(file.body.subarray(0, 5).toString()).toBe('%PDF-');
+  });
+
+  it('returns null for an unknown campaign and for an id that is not a uuid', async () => {
+    expect(await buildReportFile('00000000-0000-4000-8000-000000000000', 'a@b.se')).toBeNull();
+    expect(await buildReportFile('not-a-uuid', 'a@b.se')).toBeNull();
   });
 });

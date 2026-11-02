@@ -37,3 +37,27 @@ export type CampaignInput = {
   status: CampaignStatus;
   questions: Array<{ text: string; options: Array<{ text: string; isCorrect: boolean }> }>;
 };
+
+// --- Public quiz (what a visitor gets) ---
+
+// There is no "isCorrect" here. The visitor only sees the correct answers after submitting.
+export type PublicCampaign = {
+  slug: string;
+  title: string;
+  description: string;
+  accentColor: string;
+  questions: Array<{
+    id: number;
+    text: string;
+    options: Array<{ id: number; text: string }>;
+  }>;
+};
+
+export type QuizAnswer = { questionId: number; optionId: number };
+
+export type QuizResult = {
+  submissionId: string;
+  score: number;
+  total: number;
+  results: Array<{ questionId: number; chosenOptionId: number; correctOptionId: number }>;
+};

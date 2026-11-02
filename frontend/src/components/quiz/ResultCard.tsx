@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import type { PublicCampaign, QuizResult } from '@/lib/types';
 import { Card } from '../ui/card';
+import { fireConfetti } from './confetti';
 
 type Props = { campaign: PublicCampaign; result: QuizResult };
 
@@ -17,10 +18,16 @@ function messageFor(score: number, total: number): string {
 export function ResultCard({ campaign, result }: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
-  // Move focus to the result, so screen reader users hear it.
+  const confettiFired = useRef(false);
+
+  // Move focus to the result, so screen reader users hear it, and start the confetti once.
   useEffect(() => {
-    headingRef.current?.focus();
-  }, []);
+    headingRef.current?.focus({ preventScroll: true });
+    if (!confettiFired.current) {
+      confettiFired.current = true;
+      void fireConfetti(campaign.accentColor);
+    }
+  }, [campaign.accentColor]);
 
   const optionText = (questionId: number, optionId: number) =>
     campaign.questions.find((q) => q.id === questionId)?.options.find((o) => o.id === optionId)

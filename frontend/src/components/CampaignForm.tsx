@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { CircleHelp, ListChecks, Palette, Plus, Save, Trash2, Type, X } from 'lucide-react';
 import { errorMessage, isUnauthorized } from '@/lib/api';
 import { validateCampaign } from '@/lib/campaign-schema';
 import { emptyQuestion } from '@/lib/campaign-form';
 import type { CampaignInput } from '@/lib/types';
 import { Button, buttonClasses } from './ui/button';
 import { Card } from './ui/card';
+import { IconBubble } from './ui/icon-bubble';
 import { ContrastHint } from './ContrastHint';
 import { TextArea, TextField } from './ui/text-field';
 
@@ -92,6 +94,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
       <Card className="flex flex-col gap-5">
         <TextField
           label="Title"
+          icon={Type}
           value={values.title}
           onChange={(e) => setField('title', e.target.value)}
           error={errors.title}
@@ -107,7 +110,8 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
         />
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="accent-hex" className="text-sm font-bold">
+          <label htmlFor="accent-hex" className="flex items-center gap-2 text-sm font-bold">
+            <Palette className="size-4" aria-hidden="true" />
             Accent colour
           </label>
           <div className="flex items-center gap-3">
@@ -152,7 +156,11 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
 
       <section className="flex flex-col gap-4" aria-labelledby="questions-heading">
         <div>
-          <h2 id="questions-heading" className="font-heading text-2xl font-semibold">
+          <h2
+            id="questions-heading"
+            className="flex items-center gap-3 font-heading text-2xl font-semibold"
+          >
+            <IconBubble icon={ListChecks} size="sm" />
             Questions
           </h2>
           <p className="text-sm text-charcoal/70">
@@ -169,7 +177,10 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
         {values.questions.map((question, qi) => (
           <Card key={qi}>
             <fieldset className="flex flex-col gap-4">
-              <legend className="mb-3 font-bold">Question {qi + 1}</legend>
+              <legend className="mb-3 flex items-center gap-2 font-bold">
+                <CircleHelp className="size-5" aria-hidden="true" />
+                Question {qi + 1}
+              </legend>
 
               <TextField
                 label="Question text"
@@ -211,7 +222,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
                         disabled={question.options.length <= MIN_OPTIONS}
                         onClick={() => removeOption(qi, oi)}
                       >
-                        ✕
+                        <X className="size-5" aria-hidden="true" />
                       </Button>
                     </div>
                     {errors[`questions.${qi}.options.${oi}.text`] && (
@@ -234,6 +245,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
                     onClick={() => addOption(qi)}
                     disabled={question.options.length >= MAX_OPTIONS}
                   >
+                    <Plus className="size-5" aria-hidden="true" />
                     Add answer
                   </Button>
                   <Button
@@ -241,6 +253,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
                     onClick={() => removeQuestion(qi)}
                     disabled={values.questions.length <= MIN_QUESTIONS}
                   >
+                    <Trash2 className="size-5" aria-hidden="true" />
                     Remove question
                   </Button>
                 </div>
@@ -255,6 +268,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
             onClick={addQuestion}
             disabled={values.questions.length >= MAX_QUESTIONS}
           >
+            <Plus className="size-5" aria-hidden="true" />
             Add question
           </Button>
         </div>
@@ -271,6 +285,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
 
       <div className="flex flex-wrap gap-3">
         <Button type="submit" disabled={submitting}>
+          <Save className="size-5" aria-hidden="true" />
           {submitting ? 'Saving…' : submitLabel}
         </Button>
         <Link href="/admin/campaigns" className={buttonClasses('secondary')}>

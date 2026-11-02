@@ -1,5 +1,7 @@
 'use client';
 
+import { Pencil } from 'lucide-react';
+import { IconBubble } from '@/components/ui/icon-bubble';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -48,7 +50,10 @@ export default function EditCampaignPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-heading text-3xl font-semibold">Edit campaign</h1>
+      <h1 className="flex items-center gap-3 font-heading text-3xl font-semibold">
+        <IconBubble icon={Pencil} />
+        Edit campaign
+      </h1>
 
       {error && (
         <p

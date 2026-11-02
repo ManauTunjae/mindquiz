@@ -18,11 +18,11 @@ type Data = { campaign: CampaignDetail; stats: CampaignStats; leads: Lead[] };
 
 function StatCard({ label, value, icon }: { label: string; value: string; icon: LucideIcon }) {
   return (
-    <Card className="flex items-center gap-4 p-4 sm:p-5">
+    <Card className="flex items-center gap-4 p-4 sm:flex-col sm:items-start sm:gap-3 sm:p-5">
       <IconBubble icon={icon} size="lg" />
       <div className="min-w-0">
         <dt className="text-sm font-bold text-charcoal/80">{label}</dt>
-        <dd className="font-heading text-3xl font-semibold sm:text-4xl">{value}</dd>
+        <dd className="whitespace-nowrap font-heading text-3xl font-semibold">{value}</dd>
       </div>
     </Card>
   );

@@ -48,7 +48,7 @@ export function QuestionStats({ stats }: { stats: CampaignStats }) {
                       <p className="min-w-0">
                         {option.text}
                         {option.isCorrect && (
-                          <span className="ml-2 inline-block rounded-full bg-primary-soft px-2 py-0.5 text-xs font-bold">
+                          <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-primary-soft px-2 py-0.5 align-middle text-xs font-bold">
                             <Check className="size-3" aria-hidden="true" />
                             correct
                           </span>

@@ -217,7 +217,7 @@ export function CampaignForm({ initial, submitLabel, onSubmit }: Props) {
                       />
                       <Button
                         variant="secondary"
-                        className="w-12 shrink-0 px-0"
+                        size="icon"
                         aria-label={`Remove answer ${oi + 1} of question ${qi + 1}`}
                         disabled={question.options.length <= MIN_OPTIONS}
                         onClick={() => removeOption(qi, oi)}

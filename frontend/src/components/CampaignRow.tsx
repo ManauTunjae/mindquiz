@@ -169,9 +169,15 @@ export function CampaignRow({ campaign, onChange, onDeleted }: Props) {
             )}
             {copied ? 'Copied!' : 'Copy link'}
           </Button>
-          <Button variant="danger" onClick={() => setConfirmingDelete(true)} disabled={busy}>
+          <Button
+            variant="danger"
+            size="icon"
+            aria-label={`Delete ${campaign.title}`}
+            title="Delete"
+            onClick={() => setConfirmingDelete(true)}
+            disabled={busy}
+          >
             <Trash2 className="size-5" aria-hidden="true" />
-            Delete
           </Button>
         </div>
       )}

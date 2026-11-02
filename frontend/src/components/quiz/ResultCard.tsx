@@ -81,18 +81,16 @@ export function ResultCard({ campaign, result }: Props) {
                   <p className="font-bold">
                     {i + 1}. {question?.text}
                   </p>
-                  <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <span className="inline-flex items-center gap-1.5 font-bold">
-                      {right ? (
-                        <CircleCheck className="size-5" aria-hidden="true" />
-                      ) : (
-                        <CircleX className="size-5" aria-hidden="true" />
-                      )}
-                      {right ? 'Correct' : 'Not quite'}
-                    </span>
-                    <span className="text-charcoal/80">
-                      · Your answer: {optionText(r.questionId, r.chosenOptionId)}
-                    </span>
+                  <p className="flex items-center gap-1.5 font-bold">
+                    {right ? (
+                      <CircleCheck className="size-5" aria-hidden="true" />
+                    ) : (
+                      <CircleX className="size-5" aria-hidden="true" />
+                    )}
+                    {right ? 'Correct' : 'Not quite'}
+                  </p>
+                  <p className="text-charcoal/80">
+                    Your answer: {optionText(r.questionId, r.chosenOptionId)}
                   </p>
                   {!right && (
                     <p className="flex items-start gap-2 rounded-2xl bg-primary-soft px-3 py-2 text-sm">

@@ -3,22 +3,27 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { ArrowLeft, Gauge, Mail, Pencil, Share2, Users, type LucideIcon } from 'lucide-react';
 import { LeadList } from '@/components/dashboard/LeadList';
 import { QuestionStats } from '@/components/dashboard/QuestionStats';
 import { StatusBadge } from '@/components/StatusBadge';
 import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { IconBubble } from '@/components/ui/icon-bubble';
 import { adminApi, ApiError, errorMessage, isUnauthorized } from '@/lib/api';
 import type { CampaignDetail, CampaignStats, Lead } from '@/lib/types';
 import { Loading } from '@/components/ui/loading';
 
 type Data = { campaign: CampaignDetail; stats: CampaignStats; leads: Lead[] };
 
-function StatCard({ label, value }: { label: string; value: string }) {
+function StatCard({ label, value, icon }: { label: string; value: string; icon: LucideIcon }) {
   return (
-    <Card className="flex flex-col gap-1 p-4 sm:p-5">
-      <dt className="text-sm font-bold text-charcoal/80">{label}</dt>
-      <dd className="font-serif text-4xl font-semibold">{value}</dd>
+    <Card className="flex items-center gap-4 p-4 sm:flex-col sm:items-start sm:gap-3 sm:p-5">
+      <IconBubble icon={icon} size="lg" />
+      <div className="min-w-0">
+        <dt className="text-sm font-bold text-charcoal/80">{label}</dt>
+        <dd className="whitespace-nowrap font-heading text-3xl font-semibold">{value}</dd>
+      </div>
     </Card>
   );
 }
@@ -50,7 +55,7 @@ export default function CampaignDashboardPage() {
   if (notFound) {
     return (
       <div className="flex flex-col items-start gap-4">
-        <h1 className="font-serif text-3xl font-semibold">Campaign not found</h1>
+        <h1 className="font-heading text-3xl font-semibold">Campaign not found</h1>
         <Link href="/admin/campaigns" className={buttonClasses('secondary')}>
           Back to campaigns
         </Link>
@@ -75,12 +80,13 @@ export default function CampaignDashboardPage() {
       <div className="flex flex-col gap-3">
         <Link
           href="/admin/campaigns"
-          className="w-fit text-sm font-bold underline underline-offset-2"
+          className="inline-flex w-fit items-center gap-2 text-sm font-bold underline underline-offset-2"
         >
-          ← Campaigns
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Campaigns
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <h1 className="font-serif text-3xl font-semibold">{campaign.title}</h1>
+          <h1 className="font-heading text-3xl font-semibold">{campaign.title}</h1>
           <StatusBadge status={campaign.status} />
         </div>
         <div className="flex flex-wrap gap-3">
@@ -88,23 +94,26 @@ export default function CampaignDashboardPage() {
             href={`/admin/campaigns/${campaign.id}/edit`}
             className={buttonClasses('secondary')}
           >
+            <Pencil className="size-5" aria-hidden="true" />
             Edit
           </Link>
         </div>
       </div>
 
       <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <StatCard label="Participants" value={String(stats.participants)} />
+        <StatCard label="Participants" value={String(stats.participants)} icon={Users} />
         <StatCard
           label="Average score"
+          icon={Gauge}
           value={stats.averageScore === null ? '–' : `${stats.averageScore} of ${stats.total}`}
         />
-        <StatCard label="Leads" value={String(leads.length)} />
+        <StatCard label="Leads" value={String(leads.length)} icon={Mail} />
       </dl>
 
       {stats.participants === 0 && (
-        <Card className="text-center">
-          <p className="font-bold">No participants yet</p>
+        <Card className="flex flex-col items-center gap-2 py-8 text-center">
+          <IconBubble icon={Share2} size="lg" />
+          <p className="font-heading text-xl font-semibold">No participants yet</p>
           <p className="mt-1 text-charcoal/80">
             {campaign.status === 'published'
               ? 'Share the public link to get your first answers: '

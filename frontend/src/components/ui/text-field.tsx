@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { useId, type InputHTMLAttributes, type TextareaHTMLAttributes } from 'react';
 
 type CommonProps = { label: string; error?: string; hint?: string };
@@ -37,19 +38,28 @@ export function TextField({
   label,
   error,
   hint,
+  icon: Icon,
   className = '',
   ...props
-}: CommonProps & InputHTMLAttributes<HTMLInputElement>) {
+}: CommonProps & { icon?: LucideIcon } & InputHTMLAttributes<HTMLInputElement>) {
   const id = useId();
   return (
     <Wrapper id={id} label={label} error={error} hint={hint}>
-      <input
-        id={id}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className={`${fieldClasses} min-h-12 ${borderFor(error)} ${className}`}
-        {...props}
-      />
+      <div className="relative">
+        {Icon && (
+          <Icon
+            className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-charcoal/60"
+            aria-hidden="true"
+          />
+        )}
+        <input
+          id={id}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${id}-error` : undefined}
+          className={`${fieldClasses} min-h-12 ${Icon ? 'pl-12' : ''} ${borderFor(error)} ${className}`}
+          {...props}
+        />
+      </div>
     </Wrapper>
   );
 }

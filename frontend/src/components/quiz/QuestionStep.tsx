@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Check } from 'lucide-react';
 import type { PublicCampaign } from '@/lib/types';
 
 type Props = {
@@ -23,7 +24,7 @@ export function QuestionStep({ question, selectedOptionId, onSelect }: Props) {
         id={headingId}
         ref={headingRef}
         tabIndex={-1}
-        className="font-serif text-2xl font-semibold leading-snug outline-none sm:text-3xl"
+        className="font-heading text-xl font-semibold leading-snug outline-none sm:text-2xl"
       >
         {question.text}
       </h2>
@@ -46,7 +47,7 @@ export function QuestionStep({ question, selectedOptionId, onSelect }: Props) {
               aria-hidden="true"
               className="grid size-7 shrink-0 place-items-center rounded-full border-2 border-charcoal/60 text-sm font-bold text-white group-has-[:checked]:border-charcoal group-has-[:checked]:bg-charcoal"
             >
-              <span className="invisible group-has-[:checked]:visible">✓</span>
+              <Check className="invisible size-4 group-has-[:checked]:visible" strokeWidth={3} />
             </span>
             <span>{option.text}</span>
           </label>

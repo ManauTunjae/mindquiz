@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Plus, Sparkles } from 'lucide-react';
 import { CampaignRow } from '@/components/CampaignRow';
 import { buttonClasses } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { IconBubble } from '@/components/ui/icon-bubble';
 import { adminApi, errorMessage, isUnauthorized } from '@/lib/api';
 import type { CampaignListItem } from '@/lib/types';
 import { Loading } from '@/components/ui/loading';
@@ -35,8 +37,9 @@ export default function CampaignsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-serif text-3xl font-semibold">Campaigns</h1>
+        <h1 className="font-heading text-3xl font-semibold">Campaigns</h1>
         <Link href="/admin/campaigns/new" className={buttonClasses('primary')}>
+          <Plus className="size-5" aria-hidden="true" />
           New campaign
         </Link>
       </div>
@@ -53,9 +56,16 @@ export default function CampaignsPage() {
       {!error && campaigns === null && <Loading />}
 
       {campaigns?.length === 0 && (
-        <Card className="text-center">
-          <p className="font-bold">No campaigns yet</p>
-          <p className="mt-1 text-charcoal/80">Create your first quiz with the button above.</p>
+        <Card className="flex flex-col items-center gap-3 py-10 text-center">
+          <IconBubble icon={Sparkles} size="lg" />
+          <p className="font-heading text-xl font-semibold">No campaigns yet</p>
+          <p className="max-w-sm text-charcoal/80">
+            Create your first quiz: give it a title, pick a colour and add 3 to 5 questions.
+          </p>
+          <Link href="/admin/campaigns/new" className={buttonClasses('primary')}>
+            <Plus className="size-5" aria-hidden="true" />
+            Create your first campaign
+          </Link>
         </Card>
       )}
 

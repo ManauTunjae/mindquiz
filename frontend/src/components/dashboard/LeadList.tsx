@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Inbox, Mail, Trash2 } from 'lucide-react';
 import { adminApi, ApiError, errorMessage, isUnauthorized } from '@/lib/api';
 import type { Lead } from '@/lib/types';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
+import { IconBubble } from '../ui/icon-bubble';
 
 type Props = {
   campaignId: string;
@@ -50,6 +52,7 @@ export function LeadList({ campaignId, leads, onDeleted }: Props) {
           disabled={busyId !== null}
           aria-label={`Delete ${lead.name}`}
         >
+          <Trash2 className="size-5" aria-hidden="true" />
           Delete
         </Button>
       );
@@ -62,6 +65,7 @@ export function LeadList({ campaignId, leads, onDeleted }: Props) {
         </p>
         <div className="flex flex-wrap gap-3">
           <Button variant="danger" onClick={() => remove(lead)} disabled={busyId !== null}>
+            <Trash2 className="size-5" aria-hidden="true" />
             {busyId === lead.id ? 'Deleting…' : 'Yes, delete'}
           </Button>
           <Button
@@ -78,7 +82,11 @@ export function LeadList({ campaignId, leads, onDeleted }: Props) {
 
   return (
     <section aria-labelledby="leads-heading" className="flex flex-col gap-3">
-      <h2 id="leads-heading" className="font-serif text-2xl font-semibold">
+      <h2
+        id="leads-heading"
+        className="flex items-center gap-3 font-heading text-2xl font-semibold"
+      >
+        <IconBubble icon={Mail} size="sm" />
         Leads
       </h2>
 
@@ -92,8 +100,9 @@ export function LeadList({ campaignId, leads, onDeleted }: Props) {
       )}
 
       {leads.length === 0 ? (
-        <Card className="text-center">
-          <p className="font-bold">No leads yet</p>
+        <Card className="flex flex-col items-center gap-2 py-8 text-center">
+          <IconBubble icon={Inbox} size="lg" />
+          <p className="font-heading text-xl font-semibold">No leads yet</p>
           <p className="mt-1 text-charcoal/80">
             People who leave their name and e-mail after the quiz will show up here.
           </p>

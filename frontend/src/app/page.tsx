@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Benefits } from '@/components/landing/Benefits';
 import { Footer } from '@/components/landing/Footer';
 import { Hero } from '@/components/landing/Hero';
+import { SampleQuiz } from '@/components/landing/SampleQuiz';
+import { Section } from '@/components/landing/Section';
 import { LandingHeader } from '@/components/landing/LandingHeader';
 
 export const metadata: Metadata = {
@@ -23,6 +25,15 @@ export default function HomePage() {
       <main id="main">
         <Hero />
         <Benefits />
+        <Section
+          id="try-it"
+          eyebrow="Try it"
+          title="Answer a sample question"
+          intro="This is what your visitors will see: one question at a time, with the right answer at the end."
+          className="border-y border-mist/60 bg-surface/70"
+        >
+          <SampleQuiz />
+        </Section>
       </main>
       <Footer />
     </>

@@ -1,16 +1,21 @@
-import type { Ref } from 'react';
+import { useEffect, useRef } from 'react';
 import type { PublicCampaign } from '@/lib/types';
 
 type Props = {
   question: PublicCampaign['questions'][number];
   selectedOptionId: number | null;
   onSelect: (optionId: number) => void;
-  headingRef?: Ref<HTMLHeadingElement>; // the quiz moves focus here when the question changes
 };
 
 // One question with big answer cards. They are real radio buttons, so the keyboard works.
-export function QuestionStep({ question, selectedOptionId, onSelect, headingRef }: Props) {
+export function QuestionStep({ question, selectedOptionId, onSelect }: Props) {
   const headingId = `question-${question.id}`;
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move keyboard focus to the new question, so screen reader users hear it.
+  useEffect(() => {
+    headingRef.current?.focus({ preventScroll: true });
+  }, []);
 
   return (
     <fieldset aria-labelledby={headingId} className="flex flex-col gap-5">

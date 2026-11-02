@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { motion } from 'motion/react';
 import type { PublicCampaign, QuizResult } from '@/lib/types';
 import { Card } from '../ui/card';
 
@@ -27,19 +28,31 @@ export function ResultCard({ campaign, result }: Props) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Card className="flex flex-col gap-3 text-center">
-        <p className="text-sm font-bold text-charcoal/80">Your result</p>
-        <h1
-          ref={headingRef}
-          tabIndex={-1}
-          className="font-serif text-4xl font-semibold outline-none"
-        >
-          You got {result.score} of {result.total}
-        </h1>
-        <p className="text-lg text-charcoal/80">{messageFor(result.score, result.total)}</p>
-      </Card>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+      >
+        <Card className="flex flex-col gap-3 text-center">
+          <p className="text-sm font-bold text-charcoal/80">Your result</p>
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="font-serif text-4xl font-semibold outline-none"
+          >
+            You got {result.score} of {result.total}
+          </h1>
+          <p className="text-lg text-charcoal/80">{messageFor(result.score, result.total)}</p>
+        </Card>
+      </motion.div>
 
-      <section aria-labelledby="review-heading" className="flex flex-col gap-3">
+      <motion.section
+        aria-labelledby="review-heading"
+        className="flex flex-col gap-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
+      >
         <h2 id="review-heading" className="font-serif text-2xl font-semibold">
           Your answers
         </h2>
@@ -71,7 +84,7 @@ export function ResultCard({ campaign, result }: Props) {
             );
           })}
         </ol>
-      </section>
+      </motion.section>
     </div>
   );
 }

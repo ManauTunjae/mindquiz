@@ -14,7 +14,7 @@ export function ProgressBar({ current, total }: Props) {
         aria-valuemin={0}
         aria-valuemax={total}
         aria-valuenow={current}
-        className="h-3 w-full overflow-hidden rounded-full bg-mist"
+        className="h-3 w-full overflow-hidden rounded-full bg-mist ring-1 ring-inset ring-charcoal/50"
       >
         <div
           className="h-full rounded-full bg-primary transition-[width] duration-500 ease-out motion-reduce:transition-none"

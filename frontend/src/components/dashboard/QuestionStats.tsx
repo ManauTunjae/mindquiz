@@ -57,7 +57,7 @@ export function QuestionStats({ stats }: { stats: CampaignStats }) {
                     >
                       <div
                         className={`h-full rounded-full transition-[width] duration-700 ease-out motion-reduce:transition-none ${
-                          option.isCorrect ? 'bg-charcoal' : 'bg-charcoal/35'
+                          option.isCorrect ? 'bg-charcoal' : 'bg-charcoal/55'
                         }`}
                         style={{ width: `${grown ? option.percent : 0}%` }}
                       />
